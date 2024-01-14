@@ -16,6 +16,7 @@ import { useTheme } from "@mui/material/styles";
 import React, { ReactElement } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { Assessment, Dashboard, Settings } from "@mui/icons-material";
+import { Link } from "react-router-dom";
 
 export interface MenuItem {
   title: string;
@@ -37,13 +38,13 @@ function RenderMenu(props: { menu: MenuItem }) {
   const activeLink = location.pathname == menu.url;
 
   return (
-    <a
+    <Link
       style={{
         textDecoration: "inherit",
         backgroundColor: "inherit",
         color: "inherit",
       }}
-      href={menu.url}
+      to={menu.url}
     >
       <ListItemButton
         sx={{
@@ -54,7 +55,7 @@ function RenderMenu(props: { menu: MenuItem }) {
         <ListItemIcon>{menu.icon}</ListItemIcon>
         <ListItemText primary={menu.title} />
       </ListItemButton>
-    </a>
+    </Link>
   );
 }
 

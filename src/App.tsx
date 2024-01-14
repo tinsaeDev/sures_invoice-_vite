@@ -1,6 +1,5 @@
 import "./App.css";
 
-import Invoice from "./pages/invoice/nvoice";
 import ResponsiveAppbar from "./components/ResponsiveAppBar";
 
 // Theming
@@ -10,6 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { Box } from "@mui/material";
+import { Outlet } from "react-router-dom";
 
 function App() {
   const lightMode = useSelector((root: RootState) => root.app.light_mode);
@@ -19,9 +19,9 @@ function App() {
       ? {
           palette: {
             mode: lightMode,
-            background:{
-              default:"#ececec"
-            }
+            background: {
+              default: "#ececec",
+            },
           },
         }
       : {
@@ -38,7 +38,7 @@ function App() {
 
         <ResponsiveAppbar />
         <Box sx={{ mt: 8 }}>
-          <Invoice />
+          <Outlet />
         </Box>
       </ThemeProvider>
     </>
