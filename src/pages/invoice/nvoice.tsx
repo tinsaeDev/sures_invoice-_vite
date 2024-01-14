@@ -64,7 +64,7 @@ export default function Invoice() {
         alignItems="center"
         justifyContent="space-between"
       >
-        <Typography fontWeight="bold" variant="h5">
+        <Typography fontWeight="bold" variant="subtitle1">
           Invoices
         </Typography>
         <Button startIcon={<Add />} size="small" variant="contained">
@@ -76,7 +76,7 @@ export default function Invoice() {
         {invoices.map((inv) => {
           return (
             <Grid key={inv.uuid} xs={12} sm={4}>
-              <InvoiceCard invoice={inv}></InvoiceCard>
+              <InvoiceCard invoice={inv} />
             </Grid>
           );
         })}

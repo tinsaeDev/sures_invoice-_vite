@@ -19,6 +19,9 @@ function App() {
       ? {
           palette: {
             mode: lightMode,
+            background:{
+              default:"#ececec"
+            }
           },
         }
       : {

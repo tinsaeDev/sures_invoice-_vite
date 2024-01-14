@@ -10,6 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { CloudOffOutlined, DarkMode, LightMode } from "@mui/icons-material";
 import { RootState } from "../store";
 import { setLightMoode } from "../features/app/appSlice";
+import MenuDrawler from "./MenuDrawler";
 
 function ResponsiveAppBar() {
   const dispatch = useDispatch();
@@ -29,6 +30,10 @@ function ResponsiveAppBar() {
     });
   }, []);
 
+  //   Menu drawer controller
+
+  const [showDrawer, setShowDrawer] = useState<boolean>(false);
+
   return (
     <>
       <AppBar color="inherit" position="fixed">
@@ -41,7 +46,12 @@ function ResponsiveAppBar() {
               alignItems={"center"}
             >
               <Stack alignItems={"center"} direction="row">
-                <IconButton className="menu">
+                <IconButton
+                  className="menu"
+                  onClick={() => {
+                    setShowDrawer(true);
+                  }}
+                >
                   <MenuIcon fontSize="small" />
                 </IconButton>
                 <Typography
@@ -91,6 +101,13 @@ function ResponsiveAppBar() {
           </Toolbar>
         </Container>
       </AppBar>
+
+      <MenuDrawler
+        open={showDrawer}
+        onClose={() => {
+          setShowDrawer(false);
+        }}
+      />
     </>
   );
 }

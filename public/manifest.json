@@ -1,0 +1,24 @@
+{
+  "name": "Sures Invoices",
+  "short_name": "Sures Invoices",
+  "start_url": "/",
+  "icons": [
+    {
+      "src": "/maskable-logo.png",
+      "sizes": "700x700",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/maskable-logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "display": "standalone",
+  "theme_color": "#ffffff",
+
+  "url_handlers": [{}]
+}
