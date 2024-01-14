@@ -1,11 +1,14 @@
-import { Delete, Edit } from "@mui/icons-material";
+import { Add, Delete, Edit } from "@mui/icons-material";
 import {
+  Button,
   Card,
   CardActions,
   CardContent,
   CardHeader,
   Container,
   IconButton,
+  Paper,
+  Stack,
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
@@ -42,10 +45,35 @@ export default function Invoice() {
     },
   ];
   return (
-    <Container>
-      <Typography variant="h3"> My Invoices</Typography>
+    <Container maxWidth="xl">
+      <Paper sx={{ p: 3 }}>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          <Stack>
+            <Typography variant="subtitle1" fontWeight="bold">
+              Welcome, {companyInfo.company_name} 👋
+            </Typography>
+            <Typography variant="subtitle2" color="text.secondary">
+              Create Invoices seamlessly
+            </Typography>
+          </Stack>
+          <Button
+            startIcon={<Add />}
+            variant="contained"
+            sx={{
+              fontWeight: "bold",
+              height: "max-content",
+            }}
+          >
+            Create New
+          </Button>
+        </Stack>
+      </Paper>
 
-      <Grid container spacing={2}>
+      <Grid mt={1} container spacing={2}>
         {invoices.map((inv) => {
           return (
             <Grid key={inv.uuid} xs={12} sm={4}>
