@@ -9,7 +9,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 
 import { useSelector } from "react-redux";
 import { RootState } from "./store";
-import { Container } from "@mui/material";
+import { Box } from "@mui/material";
 
 function App() {
   const lightMode = useSelector((root: RootState) => root.app.light_mode);
@@ -19,7 +19,6 @@ function App() {
       ? {
           palette: {
             mode: lightMode,
-      
           },
         }
       : {
@@ -35,9 +34,9 @@ function App() {
         <CssBaseline />
 
         <ResponsiveAppbar />
-        <Container sx={{ mt: 8 }}>
+        <Box sx={{ mt: 8 }}>
           <Invoice />
-        </Container>
+        </Box>
       </ThemeProvider>
     </>
   );

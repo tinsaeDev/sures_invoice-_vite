@@ -47,31 +47,30 @@ export default function Invoice() {
   return (
     <Container maxWidth="xl">
       <Paper sx={{ p: 3 }}>
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <Stack>
-            <Typography variant="subtitle1" fontWeight="bold">
-              Welcome, {companyInfo.company_name} 👋
-            </Typography>
-            <Typography variant="subtitle2" color="text.secondary">
-              Create Invoices seamlessly
-            </Typography>
-          </Stack>
-          <Button
-            startIcon={<Add />}
-            variant="contained"
-            sx={{
-              fontWeight: "bold",
-              height: "max-content",
-            }}
-          >
-            Create New
-          </Button>
+        <Stack>
+          <Typography variant="subtitle2" fontWeight="bold">
+            Welcome, {companyInfo.company_name} 👋
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Create Invoices seamlessly
+          </Typography>
         </Stack>
       </Paper>
+
+      <Stack
+        mt={1}
+        p={2}
+        direction="row"
+        alignItems="center"
+        justifyContent="space-between"
+      >
+        <Typography fontWeight="bold" variant="h5">
+          Invoices
+        </Typography>
+        <Button startIcon={<Add />} size="small" variant="contained">
+          New
+        </Button>
+      </Stack>
 
       <Grid mt={1} container spacing={2}>
         {invoices.map((inv) => {
