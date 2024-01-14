@@ -12,8 +12,9 @@ import {
   Typography,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { Link } from "react-router-dom";
 
-export default function Invoice() {
+export default function InvoiceDashboadPage() {
   const companyInfo = {
     company_name: "Victor General Trading",
     logo_url: "https://sures-invoice-vite.vercel.app/vite.svg",
@@ -94,10 +95,16 @@ function InvoiceCard(props: { invoice: Invoice }) {
         <Typography> {invoice.bill_to} </Typography>
       </CardContent>
       <CardActions>
-        <IconButton>
-          <Edit color="info" />
-        </IconButton>
-        <IconButton>
+        <Link to={"/invoice"}>
+          <IconButton>
+            <Edit color="info" />
+          </IconButton>
+        </Link>
+        <IconButton
+          onClick={() => {
+            alert("This will open delete dialog of invoice");
+          }}
+        >
           <Delete color="error" />
         </IconButton>
       </CardActions>

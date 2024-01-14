@@ -42,13 +42,13 @@ export default function SettingsPage() {
 
                   <Grid xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <TextField label="Company Name" />
+                      <TextField label="Default Company Logo" />
                     </FormControl>
                   </Grid>
 
                   <Grid xs={12} sm={6}>
                     <FormControl fullWidth>
-                      <TextField label="Company Name" />
+                      <TextField type="number" label="Default Tax Rate" />
                     </FormControl>
                   </Grid>
                 </Grid>

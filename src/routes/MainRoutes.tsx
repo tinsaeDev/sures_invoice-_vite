@@ -1,4 +1,6 @@
 import App from "../App";
+
+import InvoiceForm from "../pages/invoice/InvoiceForm";
 import DashboadPage from "../pages/invoice/Dashboard";
 import SerttinsPage from "../pages/invoice/Settings";
 import ReportsPage from "../pages/invoice/Reports";
@@ -22,6 +24,11 @@ export default [
       {
         path: "/reports",
         element: <ReportsPage />,
+      },
+
+      {
+        path: "/invoice",
+        element: <InvoiceForm />,
       },
     ],
   },
