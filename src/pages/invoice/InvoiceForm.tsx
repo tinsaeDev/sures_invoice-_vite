@@ -31,6 +31,21 @@ enum TemplateInputLabel {
   PAYMENT_TERMS = "Payment Terms",
   DUE_DATE = "Due Date",
   PO = "PO",
+
+  // Footer
+
+  NOTE = "Note",
+  TERMS = "Terms",
+
+  // Total
+
+  SUB_TOTAL = "Sub Total",
+  DISCOUNT = "Discount",
+  SHIPPING = "Shipping",
+  TAX_RATE = "Tax rate",
+  TOTAL = "Total",
+  AMOUNT_PAID = "Amount Paid",
+  BALANCE_DUE = "Balance Due",
 }
 
 type TemplateInputLabelKeys = keyof typeof TemplateInputLabel;
@@ -225,7 +240,7 @@ export default function InvoiceForm() {
               </Table>
             </TableContainer>
 
-            {/* Invoice Body */}
+            {/* Invoice Footer */}
 
             <Stack
               mt={2}
@@ -233,30 +248,72 @@ export default function InvoiceForm() {
               justifyContent="space-between"
               spacing={2}
             >
-              <Stack flexGrow={1} spacing={1}>
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={5}
-                  label="Note"
-                  placeholder="Any relevant information not already coverted"
-                />
+              <Stack flexGrow={1} spacing={2}>
+                {/* Note */}
+                <Stack>
+                  <AdvTextField
+                    templateLable="NOTE"
+                    inputProps={{ style: { textAlign: "left" } }}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={5}
+                    placeholder="Any relevant information not already coverted"
+                  />
+                </Stack>
 
-                <TextField
-                  fullWidth
-                  multiline
-                  rows={5}
-                  label="Terms"
-                  placeholder="Terms and conditions- late fee, paymet methods"
-                />
+                {/* Terms */}
+
+                <Stack>
+                  <AdvTextField
+                    templateLable="TERMS"
+                    inputProps={{ style: { textAlign: "left" } }}
+                  />
+                  <TextField
+                    fullWidth
+                    multiline
+                    rows={5}
+                    placeholder="Terms and conditions- late fee, paymet methods"
+                  />
+                </Stack>
               </Stack>
-              <Stack flexGrow={1} spacing={0.5}>
-                <TextField size="small" label="Sub Total" />
-                <TextField size="small" label="Discount" />
-                <TextField size="small" label="Shipping" />
-                <TextField size="small" label="Tax Rate" />
-                <TextField size="small" label="Amount Paind" />
-                <TextField size="small" label="Balance Due" />
+
+              <Stack flexGrow={1} spacing={0.5} alignItems="flex-end">
+                <Stack direction="row">
+                  <AdvTextField templateLable="SUB_TOTAL" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="DISCOUNT" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="SHIPPING" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="TAX_RATE" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="TOTAL" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="AMOUNT_PAID" />
+                  <TextField size="small" label="" />
+                </Stack>
+
+                <Stack direction="row">
+                  <AdvTextField templateLable="BALANCE_DUE" />
+                  <TextField size="small" label="" />
+                </Stack>
               </Stack>
             </Stack>
           </Paper>
