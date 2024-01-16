@@ -3,6 +3,7 @@ import {
   Container,
   FormControl,
   InputAdornment,
+  InputBase,
   Paper,
   Stack,
   Table,
@@ -12,7 +13,42 @@ import {
   TableHead,
   TableRow,
   TextField,
+  TextFieldProps,
 } from "@mui/material";
+import { useCallback, useState } from "react";
+
+function AdvTextField(props: TextFieldProps) {
+  const [focused, setFocused] = useState(false);
+
+  const handleBlur = useCallback(function () {
+    setFocused(false);
+  }, []);
+
+  const handleFocus = useCallback(function () {
+    setFocused(true);
+  }, []);
+  return (
+    <TextField
+      {...props}
+      size="small"
+      defaultValue="Date"
+      inputProps={{
+        style: {
+          textAlign: "right",
+          fontWeight: "bold",
+        },
+      }}
+      sx={{
+        p: 1,
+        textAlign: "right",
+        border: "none",
+        "& fieldset": { border: focused ? "" : "none" },
+      }}
+      onBlur={handleBlur}
+      onFocus={handleFocus}
+    />
+  );
+}
 
 export default function InvoiceForm() {
   return (
@@ -36,12 +72,26 @@ export default function InvoiceForm() {
               {/* Left Header */}
 
               <Stack spacing={2}>
-                <TextField
-                  size="small"
-                  label="Date"
-                  type="date"
-                  defaultValue={new Date()}
+                <InputBase
+                  defaultValue="INVOICE"
+                  inputProps={{}}
+                  sx={{
+                    fontSize: "28px",
+                    fontWeight: "bold",
+                  }}
                 />
+
+                {/* Fields */}
+                <Stack direction="row" alignItems="center">
+                  <AdvTextField defaultValue="Date" />
+                  <TextField
+                    size="small"
+                    label="Date"
+                    type="date"
+                    defaultValue={new Date()}
+                  />
+                </Stack>
+
                 <TextField size="small" label="Payement Terms" type="number" />
                 <TextField size="small" label="Due Date" type="date" />
                 <TextField size="small" label="PO" />
