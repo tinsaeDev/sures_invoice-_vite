@@ -1,9 +1,10 @@
+import { Add } from "@mui/icons-material";
 import {
+  Box,
   Button,
   Container,
   FormControl,
   InputAdornment,
-  InputBase,
   Paper,
   Stack,
   Table,
@@ -17,9 +18,29 @@ import {
 } from "@mui/material";
 import { useCallback, useState } from "react";
 
-function AdvTextField(props: TextFieldProps) {
-  const [focused, setFocused] = useState(false);
+enum TemplateInputLabel {
+  INVOICE = "Invoiceee",
 
+  //
+  BILL_TO = "Bill to",
+  SHIPPED_TO = "Shipped to",
+
+  //
+
+  DATE_PREPARED = "Date",
+  PAYMENT_TERMS = "Payment Terms",
+  DUE_DATE = "Due Date",
+  PO = "PO",
+}
+
+type TemplateInputLabelKeys = keyof typeof TemplateInputLabel;
+
+function AdvTextField(
+  props: TextFieldProps & {
+    templateLable: TemplateInputLabelKeys;
+  }
+) {
+  const [focused, setFocused] = useState(false);
   const handleBlur = useCallback(function () {
     setFocused(false);
   }, []);
@@ -31,18 +52,20 @@ function AdvTextField(props: TextFieldProps) {
     <TextField
       {...props}
       size="small"
-      defaultValue="Date"
+      defaultValue={TemplateInputLabel[props.templateLable]}
       inputProps={{
+        ...props.inputProps,
         style: {
           textAlign: "right",
           fontWeight: "bold",
+          ...props.inputProps?.style,
         },
       }}
       sx={{
-        p: 1,
         textAlign: "right",
         border: "none",
         "& fieldset": { border: focused ? "" : "none" },
+        ...props.sx,
       }}
       onBlur={handleBlur}
       onFocus={handleFocus}
@@ -61,40 +84,96 @@ export default function InvoiceForm() {
               {/* RIght Header*/}
 
               <Stack spacing={2}>
-                <Button> Add Photo </Button>
+                <Box
+                  sx={{
+                    height: "10rem",
+                    width: "10rem",
+                    border: "solid 1px",
+                    // background: "orange",
+                  }}
+                >
+                  <Button
+                    sx={{
+                      height: "100%",
+                      width: "100%",
+                    }}
+                    startIcon={<Add />}
+                  >
+                    Add Photo
+                  </Button>
+                </Box>
+
                 <TextField size="small" placeholder="Invoice From" />
                 <Stack direction="row" spacing={2}>
-                  <TextField size="small" label="Bill To(*)" />
+                  <Stack>
+                    <AdvTextField
+                      size="small"
+                      templateLable="BILL_TO"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                    <TextField size="small" label="Bill To(*)" />
+                  </Stack>
 
-                  <TextField size="small" label="Shipped to" />
+                  <Stack>
+                    <AdvTextField
+                      size="small"
+                      templateLable="SHIPPED_TO"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                    <TextField size="small" label="Shipped to" />
+                  </Stack>
                 </Stack>
               </Stack>
               {/* Left Header */}
 
-              <Stack spacing={2}>
-                <InputBase
-                  defaultValue="INVOICE"
-                  inputProps={{}}
-                  sx={{
-                    fontSize: "28px",
-                    fontWeight: "bold",
+              <Stack spacing={0.5}>
+                <AdvTextField
+                  templateLable="INVOICE"
+                  inputProps={{
+                    style: {
+                      fontSize: "40px",
+                    },
                   }}
+                  sx={{}}
                 />
 
                 {/* Fields */}
                 <Stack direction="row" alignItems="center">
-                  <AdvTextField defaultValue="Date" />
+                  <AdvTextField fullWidth templateLable="DATE_PREPARED" />
+                  <TextField size="small" label="Date" type="date" fullWidth />
+                </Stack>
+
+                {/* Fields */}
+                <Stack direction="row" alignItems="center">
+                  <AdvTextField fullWidth templateLable="PAYMENT_TERMS" />
+
                   <TextField
+                    fullWidth
                     size="small"
-                    label="Date"
-                    type="date"
-                    defaultValue={new Date()}
+                    label="Payement Terms"
+                    type="number"
                   />
                 </Stack>
 
-                <TextField size="small" label="Payement Terms" type="number" />
-                <TextField size="small" label="Due Date" type="date" />
-                <TextField size="small" label="PO" />
+                {/* Fields */}
+                <Stack direction="row" alignItems="center">
+                  <AdvTextField fullWidth templateLable="DUE_DATE" />
+                  <TextField fullWidth size="small" label="Due Date" />
+                </Stack>
+
+                {/* Fields */}
+                <Stack direction="row" alignItems="center">
+                  <AdvTextField fullWidth templateLable="PO" />
+                  <TextField fullWidth size="small" label="PO" />
+                </Stack>
               </Stack>
             </Stack>
 
