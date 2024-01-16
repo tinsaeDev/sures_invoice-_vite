@@ -32,6 +32,13 @@ enum TemplateInputLabel {
   DUE_DATE = "Due Date",
   PO = "PO",
 
+  // Table
+
+  TABLE_ITEM = "Item",
+  TABLE_QTY = "Quantity",
+  TABLE_RATE = "Rate",
+  TABLE_AMOUNT = "Amount",
+
   // Footer
 
   NOTE = "Note",
@@ -200,14 +207,51 @@ export default function InvoiceForm() {
             >
               <Table size="small">
                 <TableHead>
-                  <TableCell>Item</TableCell>
-                  <TableCell>Quantity</TableCell>
-                  <TableCell>Rate</TableCell>
-                  <TableCell>Amount</TableCell>
+                  <TableCell colSpan={4}>
+                    <AdvTextField
+                      templateLable="TABLE_ITEM"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                  </TableCell>
+
+                  <TableCell>
+                    <AdvTextField
+                      templateLable="TABLE_QTY"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <AdvTextField
+                      templateLable="TABLE_RATE"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <AdvTextField
+                      templateLable="TABLE_AMOUNT"
+                      inputProps={{
+                        style: {
+                          textAlign: "left",
+                        },
+                      }}
+                    />
+                  </TableCell>
                 </TableHead>
                 <TableBody>
                   <TableRow>
-                    <TableCell>
+                    <TableCell colSpan={4}>
                       <TextField
                         fullWidth
                         size="small"
