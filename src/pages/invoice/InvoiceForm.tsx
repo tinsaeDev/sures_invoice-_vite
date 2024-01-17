@@ -7,7 +7,6 @@ import {
   Divider,
   Fab,
   FormControl,
-  IconButton,
   InputAdornment,
   Paper,
   Stack,
@@ -98,17 +97,18 @@ function AdvTextField(
   }
 ) {
   const [focused, setFocused] = useState(false);
-  const handleBlur = useCallback(function () {
+  const onBlur = useCallback(function () {
     setFocused(false);
   }, []);
 
-  const handleFocus = useCallback(function () {
+  const onFocus = useCallback(function () {
     setFocused(true);
   }, []);
   return (
     <TextField
       {...props}
       size="small"
+      name={props.templateLable}
       defaultValue={TemplateInputLabel[props.templateLable]}
       inputProps={{
         ...props.inputProps,
@@ -124,8 +124,8 @@ function AdvTextField(
         "& fieldset": { border: focused ? "" : "none" },
         ...props.sx,
       }}
-      onBlur={handleBlur}
-      onFocus={handleFocus}
+      onBlur={onBlur}
+      onFocus={onFocus}
     />
   );
 }
@@ -139,13 +139,74 @@ export default function InvoiceForm() {
         onSubmit={(values) => {
           console.log(values);
         }}
-        initialValues={
-          {
-            logo: null,
-          } as {
-            logo: Blob | null | UploadedFile;
-          }
-        }
+        initialValues={{
+          // Label Keys
+
+          INVOICE: "Invoiceee",
+
+          //
+          BILL_TO: "Bill to",
+          SHIPPED_TO: "Shipped to",
+
+          //
+
+          DATE_PREPARED: "Date",
+          PAYMENT_TERMS: "Payment Terms",
+          DUE_DATE: "Due Date",
+          PO: "PO",
+
+          // Table
+
+          TABLE_ITEM: "Item",
+          TABLE_QTY: "Quantity",
+          TABLE_RATE: "Rate",
+          TABLE_AMOUNT: "Amount",
+
+          // Footer
+
+          NOTE: "Note",
+          TERMS: "Terms",
+
+          // Total
+
+          SUB_TOTAL: "Sub Total",
+          DISCOUNT: "Discount",
+          SHIPPING: "Shipping",
+          TAX_RATE: "Tax rate",
+          TOTAL: "Total",
+          AMOUNT_PAID: "Amount Paid",
+          BALANCE_DUE: "Balance Due",
+
+          /**
+           * VALUES
+           */
+
+          //
+          logo: null,
+          invoice_from: "L nad H",
+          bill_to: "Ae Keber",
+          shipped_to: "Shipped to",
+
+          date_prepared: "Date",
+          payment_terms: "Payment Terms",
+          due_date: "Due Date",
+          po: "PO",
+
+          // Table
+
+          items: [],
+          // Footer
+
+          note: "Note",
+          terms: "Terms",
+
+          // Total
+
+          discount: "Discount",
+          shipping: "Shipping",
+          tax_rate: "Tax rate",
+          amount_paid: "Amount Paid",
+        }}
       >
         {function (formik) {
           const {
@@ -156,6 +217,7 @@ export default function InvoiceForm() {
             errors,
             touched,
           } = formik;
+          console.log(values);
           return (
             <Stack direction="row" spacing={2}>
               <Paper sx={{ p: 2 }}>
@@ -236,7 +298,19 @@ export default function InvoiceForm() {
                       )}
                     </Box>
 
-                    <TextField size="small" placeholder="Invoice From" />
+                    <TextField
+                      size="small"
+                      name="invoice_from"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      value={values.invoice_from}
+                      size="small"
+                      label="Bill To(*)"
+                      error={Boolean(
+                        errors.invoice_from && touched.invoice_from
+                      )}
+                      placeholder="Invoice From"
+                    />
                     <Stack direction="row" spacing={2}>
                       <Stack>
                         <AdvTextField
@@ -247,8 +321,18 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
-                        <TextField size="small" label="Bill To(*)" />
+                        <TextField
+                          name="bill_to"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.bill_to}
+                          size="small"
+                          label="Bill To(*)"
+                          error={Boolean(errors.bill_to && touched.bill_to)}
+                        />
                       </Stack>
 
                       <Stack>
@@ -260,8 +344,20 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
-                        <TextField size="small" label="Shipped to" />
+                        <TextField
+                          name="shipped_to"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                          value={values.shipped_to}
+                          size="small"
+                          error={Boolean(
+                            errors.shipped_to && touched.shipped_to
+                          )}
+                          label="Shipped to"
+                        />
                       </Stack>
                     </Stack>
                   </Stack>
@@ -270,6 +366,8 @@ export default function InvoiceForm() {
                   <Stack spacing={0.5}>
                     <AdvTextField
                       templateLable="INVOICE"
+                      onChange={handleChange}
+                      onBlur={handleBlur}
                       inputProps={{
                         style: {
                           fontSize: "40px",
@@ -280,37 +378,85 @@ export default function InvoiceForm() {
 
                     {/* Fields */}
                     <Stack direction="row" alignItems="center">
-                      <AdvTextField fullWidth templateLable="DATE_PREPARED" />
-                      <TextField
-                        size="small"
-                        label="Date"
-                        type="date"
+                      <AdvTextField
                         fullWidth
+                        templateLable="DATE_PREPARED"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        fullWidth
+                        type="date"
+                        name="date_prepared"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.date_prepared}
+                        size="small"
+                        error={Boolean(
+                          errors.date_prepared && touched.date_prepared
+                        )}
                       />
                     </Stack>
 
                     {/* Fields */}
                     <Stack direction="row" alignItems="center">
-                      <AdvTextField fullWidth templateLable="PAYMENT_TERMS" />
+                      <AdvTextField
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        fullWidth
+                        templateLable="PAYMENT_TERMS"
+                      />
 
                       <TextField
                         fullWidth
+                        name="payment_terms"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.payment_terms}
                         size="small"
-                        label="Payement Terms"
+                        error={Boolean(
+                          errors.payment_terms && touched.payment_terms
+                        )}
                         type="number"
                       />
                     </Stack>
 
                     {/* Fields */}
                     <Stack direction="row" alignItems="center">
-                      <AdvTextField fullWidth templateLable="DUE_DATE" />
-                      <TextField fullWidth size="small" label="Due Date" />
+                      <AdvTextField
+                        fullWidth
+                        templateLable="DUE_DATE"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        fullWidth
+                        name="due_date"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.due_date}
+                        size="small"
+                        error={Boolean(errors.due_date && touched.due_date)}
+                      />
                     </Stack>
 
                     {/* Fields */}
                     <Stack direction="row" alignItems="center">
-                      <AdvTextField fullWidth templateLable="PO" />
-                      <TextField fullWidth size="small" label="PO" />
+                      <AdvTextField
+                        fullWidth
+                        templateLable="PO"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        fullWidth
+                        name="po"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.po}
+                        size="small"
+                        error={Boolean(errors.po && touched.po)}
+                      />
                     </Stack>
                   </Stack>
                 </Stack>
@@ -331,6 +477,8 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
                       </TableCell>
 
@@ -342,6 +490,8 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
                       </TableCell>
                       <TableCell>
@@ -352,6 +502,8 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
                       </TableCell>
                       <TableCell>
@@ -362,6 +514,8 @@ export default function InvoiceForm() {
                               textAlign: "left",
                             },
                           }}
+                          onChange={handleChange}
+                          onBlur={handleBlur}
                         />
                       </TableCell>
                     </TableHead>
@@ -416,11 +570,19 @@ export default function InvoiceForm() {
                       <AdvTextField
                         templateLable="NOTE"
                         inputProps={{ style: { textAlign: "left" } }}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
                       <TextField
                         fullWidth
                         multiline
                         rows={5}
+                        name="note"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.note}
+                        size="small"
+                        error={Boolean(errors.note && touched.note)}
                         placeholder="Any relevant information not already coverted"
                       />
                     </Stack>
@@ -431,11 +593,19 @@ export default function InvoiceForm() {
                       <AdvTextField
                         templateLable="TERMS"
                         inputProps={{ style: { textAlign: "left" } }}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
                       />
                       <TextField
                         fullWidth
                         multiline
                         rows={5}
+                        name="terms"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.terms}
+                        size="small"
+                        error={Boolean(errors.terms && touched.terms)}
                         placeholder="Terms and conditions- late fee, paymet methods"
                       />
                     </Stack>
@@ -443,37 +613,95 @@ export default function InvoiceForm() {
 
                   <Stack flexGrow={1} spacing={0.5} alignItems="flex-end">
                     <Stack direction="row">
-                      <AdvTextField templateLable="SUB_TOTAL" />
+                      <AdvTextField
+                        templateLable="SUB_TOTAL"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
                       <TextField size="small" label="" />
                     </Stack>
 
                     <Stack direction="row">
-                      <AdvTextField templateLable="DISCOUNT" />
+                      <AdvTextField
+                        templateLable="DISCOUNT"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        name="discount"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.discount}
+                        size="small"
+                        error={Boolean(errors.discount && touched.discount)}
+                      />
+                    </Stack>
+
+                    <Stack direction="row">
+                      <AdvTextField
+                        templateLable="SHIPPING"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        size="small"
+                        name="shipping"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.shipping}
+                        error={Boolean(errors.shipping && touched.shipping)}
+                      />
+                    </Stack>
+
+                    <Stack direction="row">
+                      <AdvTextField
+                        templateLable="TAX_RATE"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        size="small"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.tax_rate}
+                        name="tax_rate"
+                        error={Boolean(errors.tax_rate && touched.tax_rate)}
+                      />
+                    </Stack>
+
+                    <Stack direction="row">
+                      <AdvTextField
+                        templateLable="TOTAL"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
                       <TextField size="small" label="" />
                     </Stack>
 
                     <Stack direction="row">
-                      <AdvTextField templateLable="SHIPPING" />
-                      <TextField size="small" label="" />
+                      <AdvTextField
+                        templateLable="AMOUNT_PAID"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
+                      <TextField
+                        size="small"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        value={values.amount_paid}
+                        name="amount_paid"
+                        error={Boolean(
+                          errors.amount_paid && touched.amount_paid
+                        )}
+                      />
                     </Stack>
 
                     <Stack direction="row">
-                      <AdvTextField templateLable="TAX_RATE" />
-                      <TextField size="small" label="" />
-                    </Stack>
-
-                    <Stack direction="row">
-                      <AdvTextField templateLable="TOTAL" />
-                      <TextField size="small" label="" />
-                    </Stack>
-
-                    <Stack direction="row">
-                      <AdvTextField templateLable="AMOUNT_PAID" />
-                      <TextField size="small" label="" />
-                    </Stack>
-
-                    <Stack direction="row">
-                      <AdvTextField templateLable="BALANCE_DUE" />
+                      <AdvTextField
+                        templateLable="BALANCE_DUE"
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                      />
                       <TextField size="small" label="" />
                     </Stack>
                   </Stack>
