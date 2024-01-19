@@ -10,6 +10,7 @@ import {
   Paper,
   Stack,
   TextField,
+  Typography,
 } from "@mui/material";
 import { Formik } from "formik";
 import { useRef } from "react";
@@ -114,10 +115,10 @@ export default function InvoiceForm() {
 
     // Total
 
-    discount: "Discount",
-    shipping: "Shipping",
-    tax_rate: "Tax rate",
-    amount_paid: "Amount Paid",
+    discount: 0,
+    shipping: 0,
+    tax_rate: 10,
+    amount_paid: 0,
   };
   return (
     <Container maxWidth="xl">
@@ -136,7 +137,20 @@ export default function InvoiceForm() {
             errors,
             touched,
           } = formik;
-          console.log(values);
+
+          const subTotal: number = values.items
+            .map((p) => p.qty * p.rate)
+            .reduce((p, c) => {
+              return p + c;
+            });
+
+          const taxAmount = subTotal * (values.tax_rate / 100);
+          
+
+          const discountAmount = (subTotal  + taxAmount ) * (values.discount / 100);
+          const total = (subTotal + taxAmount) - discountAmount;
+          const balanceDue = total - values.amount_paid;
+
           return (
             <Stack direction="row" spacing={2}>
               <Paper sx={{ p: 2 }}>
@@ -438,13 +452,25 @@ export default function InvoiceForm() {
                   </Stack>
 
                   <Stack flexGrow={1} spacing={0.5} alignItems="flex-end">
-                    <Stack direction="row">
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="center"
+                    >
                       <AdvTextField
                         templateLable="SUB_TOTAL"
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      <TextField size="small" label="" />
+                      <Typography
+                        fontWeight="bold"
+                        sx={{
+                          width: "fill-available",
+                          textAlign: "right",
+                        }}
+                      >
+                        {subTotal}
+                      </Typography>
                     </Stack>
 
                     <Stack direction="row">
@@ -501,7 +527,8 @@ export default function InvoiceForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      <TextField size="small" label="" />
+
+                      <Typography> {total} </Typography>
                     </Stack>
 
                     <Stack direction="row">
@@ -528,7 +555,7 @@ export default function InvoiceForm() {
                         onChange={handleChange}
                         onBlur={handleBlur}
                       />
-                      <TextField size="small" label="" />
+                      <Typography>{balanceDue}</Typography>
                     </Stack>
                   </Stack>
                 </Stack>
@@ -552,7 +579,7 @@ export default function InvoiceForm() {
                       getOptionLabel={(option) => {
                         const i = currencies.find((c) => c.code == option);
                         if (!i) {
-                          return "Not FOumd"
+                          return "Not FOumd";
                           throw Error();
                         }
 

@@ -74,10 +74,10 @@ type Invoice = {
 
   // Total
 
-  discount: string;
-  shipping: string;
-  tax_rate: string;
-  amount_paid: string;
+  discount: number;
+  shipping: number;
+  tax_rate: number;
+  amount_paid: number;
 };
 
 type Product = {
