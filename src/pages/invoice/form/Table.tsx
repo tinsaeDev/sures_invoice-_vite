@@ -95,11 +95,8 @@ export default function InvoiceTable(props: {
                     fullWidth
                     size="small"
                     name={descriptionName}
-                    // onChange={handleChange}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Description of product or service"
                     value={item.description}
                   />
@@ -109,11 +106,8 @@ export default function InvoiceTable(props: {
                     type="number"
                     size="small"
                     name={qtyName}
-                    // onChange={handleChange}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     value={item.qty}
                   />
                 </TableCell>
@@ -126,20 +120,18 @@ export default function InvoiceTable(props: {
                     }}
                     size="small"
                     name={rateName}
-                    // onChange={handleChange}
-                    onBlur={(e) => {
-                      handleBlur(e);
-                      handleChange(e);
-                    }}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     value={item.rate}
                   />
                 </TableCell>
-                <TableCell align="right">ETB 323,23</TableCell>
+                <TableCell align="right">{item.rate * item.qty}</TableCell>
 
                 <IconButton
                   sx={{
                     position: "absolute",
                     right: "-1rem",
+                    display: "none",
                   }}
                   size="small"
                 >
