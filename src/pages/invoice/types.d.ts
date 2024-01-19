@@ -1,5 +1,6 @@
+type CurrencyCode = "USD" | "ETB" | "INR" | "EUR";
 type Currency = {
-  code: string;
+  code: CurrencyCode;
   name: string;
   symboll: string;
 };
@@ -54,7 +55,7 @@ type Invoice = {
   logo: Blob | UploadedFile | null;
   id: string;
 
-  currency: string;
+  currency_code: CurrencyCode;
 
   invoice_from: string;
   bill_to: string;

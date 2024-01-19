@@ -13,12 +13,27 @@ import {
 import AdvTextField from "../components/AdvTestField";
 import { Close } from "@mui/icons-material";
 import { FormikProps } from "formik";
+import { currencies } from "../currencies";
+import { useMemo } from "react";
 
 export default function InvoiceTable(props: {
   formik: FormikProps<Invoice & TemplateLabels>;
 }) {
   const { handleBlur, handleChange, values, setFieldValue } = props.formik;
 
+  const currency: Currency = useMemo(
+    function () {
+      const curr = currencies.find((c) => {
+        return c.code == values.currency_code;
+      });
+
+      if (!curr) {
+        throw new Error("Unknown currenct code");
+      }
+      return curr;
+    },
+    [values.currency_code]
+  );
   return (
     <TableContainer
       sx={{
@@ -115,7 +130,15 @@ export default function InvoiceTable(props: {
                   <TextField
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment position="end">USD</InputAdornment>
+                        <InputAdornment
+                          position="end"
+                          sx={{
+                            p: 1,
+                            background: "red",
+                          }}
+                        >
+                          {currency?.symboll || "NC"}
+                        </InputAdornment>
                       ),
                     }}
                     size="small"

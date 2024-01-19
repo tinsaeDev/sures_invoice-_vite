@@ -9,41 +9,15 @@ import {
   FormControl,
   Paper,
   Stack,
-  Table,
-  TableCell,
   TextField,
   Typography,
 } from "@mui/material";
 import { Formik } from "formik";
 import { useRef } from "react";
 import AdvTextField from "../components/AdvTestField";
-import InvoiceTable from "./Table";
+import InvoiceTable from "./InvoiceTable";
 
-const currencies = [
-  {
-    name: "Ethiopia Birr",
-    symboll: "n",
-    code: "BIRR",
-  },
-
-  {
-    name: "USA Dollar",
-    symboll: "$",
-    code: "US$",
-  },
-
-  {
-    name: "Indian Ruppe",
-    symboll: "₹",
-    code: "IN₹",
-  },
-
-  {
-    name: "Euro",
-    symboll: "",
-    code: "EUR",
-  },
-];
+import { currencies } from "../currencies";
 
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -90,7 +64,7 @@ export default function InvoiceForm() {
 
     //
     id: "INV_001",
-    currency: "SSS",
+    currency_code: "INR",
     logo: null,
     invoice_from: "L nad H",
     bill_to: "Ae Keber",
@@ -404,7 +378,7 @@ export default function InvoiceForm() {
                   mt={2}
                   direction="row"
                   justifyContent="space-between"
-                  spacing={2}
+                  spacing={1}
                 >
                   <Stack flexGrow={1} spacing={2}>
                     {/* Note */}
@@ -453,7 +427,7 @@ export default function InvoiceForm() {
                     </Stack>
                   </Stack>
 
-                  <Stack flexGrow={1} spacing={0.5} alignItems="flex-end">
+                  <Stack spacing={0.5} alignItems="flex-end">
                     <table>
                       <tbody>
                         {/* Sub TOtal */}
@@ -615,7 +589,6 @@ export default function InvoiceForm() {
                     <Autocomplete
                       disablePortal
                       size="small"
-                      id="combo-box-demo"
                       options={currencies.map((c) => c.code)}
                       getOptionLabel={(option) => {
                         const i = currencies.find((c) => c.code == option);
@@ -627,11 +600,21 @@ export default function InvoiceForm() {
                         return i.name;
                       }}
                       sx={{ width: 300 }}
+                      value={values.currency_code}
+                      onChange={(_e, value) => {
+                        setFieldValue("currency_code", value);
+                      }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Currency" />
+                        <TextField
+                          name="currency_code"
+                          {...params}
+                          label="Currency"
+                        />
                       )}
                     />
                   </FormControl>
+
+                  <Typography variant="h4">{values.currency_code}</Typography>
 
                   {/* Save as default */}
 
