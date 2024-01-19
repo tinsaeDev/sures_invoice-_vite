@@ -79,6 +79,10 @@ export default function InvoiceTable(props: {
         </TableHead>
         <TableBody>
           {values.items.map((item, index) => {
+            const descriptionName = `items[${index}].description`;
+            const qtyName = `items[${index}].qty`;
+            const rateName = `items[${index}].rate`;
+
             return (
               <TableRow
                 key={index}
@@ -90,7 +94,7 @@ export default function InvoiceTable(props: {
                   <TextField
                     fullWidth
                     size="small"
-                    name={`items[${index}].description`}
+                    name={descriptionName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     placeholder="Description of product or service"
@@ -101,7 +105,7 @@ export default function InvoiceTable(props: {
                   <TextField
                     type="number"
                     size="small"
-                    name={`items[${index}].qty`}
+                    name={qtyName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={item.qty}
@@ -115,7 +119,7 @@ export default function InvoiceTable(props: {
                       ),
                     }}
                     size="small"
-                    name={`items[${index}].rate`}
+                    name={rateName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={item.rate}
