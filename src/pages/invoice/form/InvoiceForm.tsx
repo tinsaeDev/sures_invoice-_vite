@@ -9,6 +9,8 @@ import {
   FormControl,
   Paper,
   Stack,
+  Table,
+  TableCell,
   TextField,
   Typography,
 } from "@mui/material";
@@ -145,10 +147,10 @@ export default function InvoiceForm() {
             });
 
           const taxAmount = subTotal * (values.tax_rate / 100);
-          
 
-          const discountAmount = (subTotal  + taxAmount ) * (values.discount / 100);
-          const total = (subTotal + taxAmount) - discountAmount;
+          const discountAmount =
+            (subTotal + taxAmount) * (values.discount / 100);
+          const total = subTotal + taxAmount - discountAmount + values.shipping;
           const balanceDue = total - values.amount_paid;
 
           return (
@@ -452,111 +454,150 @@ export default function InvoiceForm() {
                   </Stack>
 
                   <Stack flexGrow={1} spacing={0.5} alignItems="flex-end">
-                    <Stack
-                      direction="row"
-                      alignItems="center"
-                      justifyContent="center"
-                    >
-                      <AdvTextField
-                        templateLable="SUB_TOTAL"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <Typography
-                        fontWeight="bold"
-                        sx={{
-                          width: "fill-available",
-                          textAlign: "right",
-                        }}
-                      >
-                        {subTotal}
-                      </Typography>
-                    </Stack>
+                    <table>
+                      <tbody>
+                        {/* Sub TOtal */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="SUB_TOTAL"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </td>
+                          <td>
+                            <Typography fontWeight="bold">
+                              {subTotal}
+                            </Typography>
+                          </td>
+                        </tr>
 
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="DISCOUNT"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <TextField
-                        name="discount"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.discount}
-                        size="small"
-                        error={Boolean(errors.discount && touched.discount)}
-                      />
-                    </Stack>
+                        {/* Discount */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="DISCOUNT"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              name="discount"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.discount}
+                              size="small"
+                              error={Boolean(
+                                errors.discount && touched.discount
+                              )}
+                            />
+                          </td>
+                        </tr>
+                        {/* Shipping */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="SHIPPING"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              size="small"
+                              name="shipping"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.shipping}
+                              error={Boolean(
+                                errors.shipping && touched.shipping
+                              )}
+                            />
+                          </td>
+                        </tr>
 
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="SHIPPING"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <TextField
-                        size="small"
-                        name="shipping"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.shipping}
-                        error={Boolean(errors.shipping && touched.shipping)}
-                      />
-                    </Stack>
+                        {/* Tax Rate */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="TAX_RATE"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              size="small"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.tax_rate}
+                              name="tax_rate"
+                              error={Boolean(
+                                errors.tax_rate && touched.tax_rate
+                              )}
+                            />
+                          </td>
+                        </tr>
 
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="TAX_RATE"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <TextField
-                        size="small"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.tax_rate}
-                        name="tax_rate"
-                        error={Boolean(errors.tax_rate && touched.tax_rate)}
-                      />
-                    </Stack>
+                        {/* Total */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="TOTAL"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{
+                                fontWeight: "normal",
+                              }}
+                            />
+                          </td>
+                          <td>
+                            <Typography>{total}</Typography>
+                          </td>
+                        </tr>
 
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="TOTAL"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
+                        {/* Amount Paid */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="AMOUNT_PAID"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              style={{
+                                fontWeight: "normal",
+                              }}
+                            />
+                          </td>
+                          <td>
+                            <TextField
+                              size="small"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.amount_paid}
+                              name="amount_paid"
+                              error={Boolean(
+                                errors.amount_paid && touched.amount_paid
+                              )}
+                            />
+                          </td>
+                        </tr>
 
-                      <Typography> {total} </Typography>
-                    </Stack>
-
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="AMOUNT_PAID"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <TextField
-                        size="small"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.amount_paid}
-                        name="amount_paid"
-                        error={Boolean(
-                          errors.amount_paid && touched.amount_paid
-                        )}
-                      />
-                    </Stack>
-
-                    <Stack direction="row">
-                      <AdvTextField
-                        templateLable="BALANCE_DUE"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                      />
-                      <Typography>{balanceDue}</Typography>
-                    </Stack>
+                        {/* Balce De */}
+                        <tr>
+                          <td>
+                            <AdvTextField
+                              templateLable="BALANCE_DUE"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                            />
+                          </td>
+                          <td>
+                            <Typography>{balanceDue}</Typography>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </Stack>
                 </Stack>
               </Paper>
