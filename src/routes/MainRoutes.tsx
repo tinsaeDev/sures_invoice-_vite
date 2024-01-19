@@ -1,6 +1,6 @@
 import App from "../App";
 
-import InvoiceForm from "../pages/invoice/InvoiceForm";
+import InvoiceForm from "../pages/invoice/form/InvoiceForm";
 import DashboadPage from "../pages/invoice/Dashboard";
 import SerttinsPage from "../pages/invoice/Settings";
 import ReportsPage from "../pages/invoice/Reports";

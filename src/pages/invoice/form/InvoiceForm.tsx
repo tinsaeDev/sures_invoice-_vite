@@ -549,9 +549,15 @@ export default function InvoiceForm() {
                       size="small"
                       id="combo-box-demo"
                       options={currencies.map((c) => c.code)}
-                      getOptionLabel={(option) =>
-                        currencies.find((c) => c.code == option)?.name
-                      }
+                      getOptionLabel={(option) => {
+                        const i = currencies.find((c) => c.code == option);
+                        if (!i) {
+                          return "Not FOumd"
+                          throw Error();
+                        }
+
+                        return i.name;
+                      }}
                       sx={{ width: 300 }}
                       renderInput={(params) => (
                         <TextField {...params} label="Currency" />
