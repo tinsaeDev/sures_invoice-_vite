@@ -7,20 +7,13 @@ import {
   Divider,
   Fab,
   FormControl,
-  InputAdornment,
   Paper,
   Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
   TextField,
-  TextFieldProps,
 } from "@mui/material";
 import { Formik } from "formik";
-import { useCallback, useRef, useState } from "react";
+import { useRef } from "react";
+import AdvTextField from "../components/AdvTestField";
 
 const currencies = [
   {
@@ -47,88 +40,6 @@ const currencies = [
     code: "EUR",
   },
 ];
-
-enum TemplateInputLabel {
-  INVOICE = "Invoiceee",
-
-  //
-  BILL_TO = "Bill to",
-  SHIPPED_TO = "Shipped to",
-
-  //
-
-  DATE_PREPARED = "Date",
-  PAYMENT_TERMS = "Payment Terms",
-  DUE_DATE = "Due Date",
-  PO = "PO",
-
-  // Table
-
-  TABLE_ITEM = "Item",
-  TABLE_QTY = "Quantity",
-  TABLE_RATE = "Rate",
-  TABLE_AMOUNT = "Amount",
-
-  // Footer
-
-  NOTE = "Note",
-  TERMS = "Terms",
-
-  // Total
-
-  SUB_TOTAL = "Sub Total",
-  DISCOUNT = "Discount",
-  SHIPPING = "Shipping",
-  TAX_RATE = "Tax rate",
-  TOTAL = "Total",
-  AMOUNT_PAID = "Amount Paid",
-  BALANCE_DUE = "Balance Due",
-}
-
-type UploadedFile = {
-  url: string;
-};
-
-type TemplateInputLabelKeys = keyof typeof TemplateInputLabel;
-
-function AdvTextField(
-  props: TextFieldProps & {
-    templateLable: TemplateInputLabelKeys;
-  }
-) {
-  const [focused, setFocused] = useState(false);
-  const onBlur = useCallback(function () {
-    setFocused(false);
-  }, []);
-
-  const onFocus = useCallback(function () {
-    setFocused(true);
-  }, []);
-  return (
-    <TextField
-      {...props}
-      size="small"
-      name={props.templateLable}
-      defaultValue={TemplateInputLabel[props.templateLable]}
-      inputProps={{
-        ...props.inputProps,
-        style: {
-          textAlign: "right",
-          fontWeight: "bold",
-          ...props.inputProps?.style,
-        },
-      }}
-      sx={{
-        textAlign: "right",
-        border: "none",
-        "& fieldset": { border: focused ? "" : "none" },
-        ...props.sx,
-      }}
-      onBlur={onBlur}
-      onFocus={onFocus}
-    />
-  );
-}
 
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -194,7 +105,7 @@ export default function InvoiceForm() {
 
           // Table
 
-          items: [],
+          items: [1, 2, 3],
           // Footer
 
           note: "Note",
@@ -304,7 +215,7 @@ export default function InvoiceForm() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.invoice_from}
-                      size="small"
+                      
                       label="Bill To(*)"
                       error={Boolean(
                         errors.invoice_from && touched.invoice_from
@@ -462,99 +373,6 @@ export default function InvoiceForm() {
                 </Stack>
 
                 {/* Invoice Body */}
-                <TableContainer
-                  sx={{
-                    mt: 2,
-                  }}
-                >
-                  <Table size="small">
-                    <TableHead>
-                      <TableCell colSpan={4}>
-                        <AdvTextField
-                          templateLable="TABLE_ITEM"
-                          inputProps={{
-                            style: {
-                              textAlign: "left",
-                            },
-                          }}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </TableCell>
-
-                      <TableCell>
-                        <AdvTextField
-                          templateLable="TABLE_QTY"
-                          inputProps={{
-                            style: {
-                              textAlign: "left",
-                            },
-                          }}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <AdvTextField
-                          templateLable="TABLE_RATE"
-                          inputProps={{
-                            style: {
-                              textAlign: "left",
-                            },
-                          }}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </TableCell>
-                      <TableCell>
-                        <AdvTextField
-                          templateLable="TABLE_AMOUNT"
-                          inputProps={{
-                            style: {
-                              textAlign: "left",
-                            },
-                          }}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                      </TableCell>
-                    </TableHead>
-                    <TableBody>
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <TextField
-                            fullWidth
-                            size="small"
-                            placeholder="Description of product or service"
-                          />
-                        </TableCell>
-                        <TableCell>
-                          <TextField type="number" size="small" />
-                        </TableCell>
-                        <TableCell>
-                          <TextField
-                            InputProps={{
-                              startAdornment: (
-                                <InputAdornment position="end">
-                                  USD
-                                </InputAdornment>
-                              ),
-                            }}
-                            size="small"
-                          />
-                        </TableCell>
-                        <TableCell>ETB 323,23</TableCell>
-                      </TableRow>
-                      <TableRow>
-                        <TableCell colSpan={4}>
-                          <Button size="small" variant="contained">
-                            Add Item
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    </TableBody>
-                  </Table>
-                </TableContainer>
 
                 {/* Invoice Footer */}
 
