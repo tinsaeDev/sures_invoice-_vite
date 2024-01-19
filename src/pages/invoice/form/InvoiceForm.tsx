@@ -14,6 +14,7 @@ import {
 import { Formik } from "formik";
 import { useRef } from "react";
 import AdvTextField from "../components/AdvTestField";
+import InvoiceTable from "./Table";
 
 const currencies = [
   {
@@ -102,7 +103,7 @@ export default function InvoiceForm() {
     items: [
       {
         description: "",
-        qty: 0,
+        qty: 1,
         rate: 0,
       },
     ],
@@ -380,6 +381,7 @@ export default function InvoiceForm() {
 
                 {/* Invoice Body */}
 
+                <InvoiceTable formik={formik} />
                 {/* Invoice Footer */}
 
                 <Stack
@@ -535,7 +537,7 @@ export default function InvoiceForm() {
               <Paper>
                 <Stack p={2} spacing={2}>
                   <Button size="small" variant="contained">
-                    Generate Invoice{" "}
+                    Generate Invoice
                   </Button>
 
                   <Divider />

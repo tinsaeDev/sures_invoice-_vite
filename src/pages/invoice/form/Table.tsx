@@ -14,7 +14,9 @@ import AdvTextField from "../components/AdvTestField";
 import { Close } from "@mui/icons-material";
 import { FormikProps } from "formik";
 
-export default function InvoiceTable(props: { formik: FormikProps<any> }) {
+export default function InvoiceTable(props: {
+  formik: FormikProps<Invoice & TemplateLabels>;
+}) {
   const { handleBlur, handleChange, values, setFieldValue } = props.formik;
 
   return (
@@ -76,9 +78,10 @@ export default function InvoiceTable(props: { formik: FormikProps<any> }) {
           </TableCell>
         </TableHead>
         <TableBody>
-          {values.items.map((itep: Product) => {
+          {values.items.map((item, index) => {
             return (
               <TableRow
+                key={index}
                 sx={{
                   position: "relative",
                 }}
@@ -87,11 +90,22 @@ export default function InvoiceTable(props: { formik: FormikProps<any> }) {
                   <TextField
                     fullWidth
                     size="small"
+                    name={`items[${index}].description`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
                     placeholder="Description of product or service"
+                    value={item.description}
                   />
                 </TableCell>
                 <TableCell>
-                  <TextField type="number" size="small" />
+                  <TextField
+                    type="number"
+                    size="small"
+                    name={`items[${index}].qty`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={item.qty}
+                  />
                 </TableCell>
                 <TableCell>
                   <TextField
@@ -101,6 +115,10 @@ export default function InvoiceTable(props: { formik: FormikProps<any> }) {
                       ),
                     }}
                     size="small"
+                    name={`items[${index}].rate`}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={item.rate}
                   />
                 </TableCell>
                 <TableCell align="right">ETB 323,23</TableCell>
@@ -123,7 +141,11 @@ export default function InvoiceTable(props: { formik: FormikProps<any> }) {
                 size="small"
                 variant="contained"
                 onClick={() => {
-                  values.items.push(1);
+                  values.items.push({
+                    description: "",
+                    qty: 1,
+                    rate: 0,
+                  });
                   setFieldValue("items", values.items);
                 }}
               >
