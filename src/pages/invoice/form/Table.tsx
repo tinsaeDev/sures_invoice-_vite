@@ -95,8 +95,11 @@ export default function InvoiceTable(props: {
                     fullWidth
                     size="small"
                     name={descriptionName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    // onChange={handleChange}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                    }}
                     placeholder="Description of product or service"
                     value={item.description}
                   />
@@ -106,8 +109,11 @@ export default function InvoiceTable(props: {
                     type="number"
                     size="small"
                     name={qtyName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    // onChange={handleChange}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                    }}
                     value={item.qty}
                   />
                 </TableCell>
@@ -120,8 +126,11 @@ export default function InvoiceTable(props: {
                     }}
                     size="small"
                     name={rateName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
+                    // onChange={handleChange}
+                    onBlur={(e) => {
+                      handleBlur(e);
+                      handleChange(e);
+                    }}
                     value={item.rate}
                   />
                 </TableCell>
