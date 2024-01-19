@@ -13,7 +13,13 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Link } from "react-router-dom";
-
+type tmpInv = {
+  bill_to: string;
+  company_name: string;
+  invoice_id: string;
+  shipped_to: string;
+  uuid: string;
+};
 export default function InvoiceDashboadPage() {
   const companyInfo = {
     company_name: "Victor General Trading",
@@ -21,7 +27,7 @@ export default function InvoiceDashboadPage() {
     tax_rate: 15,
   };
 
-  const invoices: Invoice[] = [
+  const invoices: tmpInv[] = [
     {
       bill_to: "Tesema",
       company_name: "DQI General Trading",
@@ -86,7 +92,7 @@ export default function InvoiceDashboadPage() {
   );
 }
 
-function InvoiceCard(props: { invoice: Invoice }) {
+function InvoiceCard(props: { invoice: tmpInv }) {
   const { invoice } = props;
   return (
     <Card>
