@@ -44,80 +44,87 @@ const currencies = [
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
+  const initialValues: Invoice & TemplateLabels = {
+    // Label Keys
+
+    INVOICE: "Invoiceee",
+    BILL_TO: "Bill to",
+    SHIPPED_TO: "Shipped to",
+
+    //
+
+    DATE_PREPARED: "Date",
+    PAYMENT_TERMS: "Payment Terms",
+    DUE_DATE: "Due Date",
+    PO: "PO",
+
+    // Table
+
+    TABLE_ITEM: "Item",
+    TABLE_QTY: "Quantity",
+    TABLE_RATE: "Rate",
+    TABLE_AMOUNT: "Amount",
+
+    // Footer
+
+    NOTE: "Note",
+    TERMS: "Terms",
+
+    // Total
+
+    SUB_TOTAL: "Sub Total",
+    DISCOUNT: "Discount",
+    SHIPPING: "Shipping",
+    TAX_RATE: "Tax rate",
+    TOTAL: "Total",
+    AMOUNT_PAID: "Amount Paid",
+    BALANCE_DUE: "Balance Due",
+
+    /**
+     * VALUES
+     */
+
+    //
+    id: "INV_001",
+    currency: "SSS",
+    logo: null,
+    invoice_from: "L nad H",
+    bill_to: "Ae Keber",
+    shipped_to: "Shipped to",
+
+    date_prepared: "Date",
+    payment_terms: "Payment Terms",
+    due_date: "Due Date",
+    po: "PO",
+
+    // Table
+
+    items: [
+      {
+        description: "",
+        qty: 0,
+        rate: 0,
+      },
+    ],
+    // Footer
+
+    note: "Note",
+    terms: "Terms",
+
+    // Total
+
+    discount: "Discount",
+    shipping: "Shipping",
+    tax_rate: "Tax rate",
+    amount_paid: "Amount Paid",
+  };
   return (
     <Container maxWidth="xl">
       <Formik
         onSubmit={(values) => {
           console.log(values);
         }}
-        initialValues={{
-          // Label Keys
-
-          INVOICE: "Invoiceee",
-
-          //
-          BILL_TO: "Bill to",
-          SHIPPED_TO: "Shipped to",
-
-          //
-
-          DATE_PREPARED: "Date",
-          PAYMENT_TERMS: "Payment Terms",
-          DUE_DATE: "Due Date",
-          PO: "PO",
-
-          // Table
-
-          TABLE_ITEM: "Item",
-          TABLE_QTY: "Quantity",
-          TABLE_RATE: "Rate",
-          TABLE_AMOUNT: "Amount",
-
-          // Footer
-
-          NOTE: "Note",
-          TERMS: "Terms",
-
-          // Total
-
-          SUB_TOTAL: "Sub Total",
-          DISCOUNT: "Discount",
-          SHIPPING: "Shipping",
-          TAX_RATE: "Tax rate",
-          TOTAL: "Total",
-          AMOUNT_PAID: "Amount Paid",
-          BALANCE_DUE: "Balance Due",
-
-          /**
-           * VALUES
-           */
-
-          //
-          logo: null,
-          invoice_from: "L nad H",
-          bill_to: "Ae Keber",
-          shipped_to: "Shipped to",
-
-          date_prepared: "Date",
-          payment_terms: "Payment Terms",
-          due_date: "Due Date",
-          po: "PO",
-
-          // Table
-
-          items: [1, 2, 3],
-          // Footer
-
-          note: "Note",
-          terms: "Terms",
-
-          // Total
-
-          discount: "Discount",
-          shipping: "Shipping",
-          tax_rate: "Tax rate",
-          amount_paid: "Amount Paid",
-        }}
+        initialValues={initialValues}
       >
         {function (formik) {
           const {
@@ -215,7 +222,6 @@ export default function InvoiceForm() {
                       onChange={handleChange}
                       onBlur={handleBlur}
                       value={values.invoice_from}
-                      
                       label="Bill To(*)"
                       error={Boolean(
                         errors.invoice_from && touched.invoice_from

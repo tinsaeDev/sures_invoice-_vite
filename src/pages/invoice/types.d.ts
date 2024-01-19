@@ -4,18 +4,6 @@ type Currency = {
   symboll: string;
 };
 
-type Invoice = {
-  uuid: string;
-  company_name: string;
-  invoice_id: string;
-  bill_to: string;
-  shipped_to: string;
-  logo_url?: string;
-  tax_rate?: number;
-
-  currency?: Currency;
-};
-
 type TemplateLabels = {
   INVOICE: string;
 
@@ -57,13 +45,13 @@ type UploadedFile = {
   url: string;
 };
 
-type InvoiceF = {
+type Invoice = {
   /**
    * VALUES
    */
 
   //
-  logo: Blob | UploadedFile;
+  logo: Blob | UploadedFile | null;
   id: string;
 
   currency: string;
