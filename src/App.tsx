@@ -10,6 +10,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "./store";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
+import { IntlProvider } from "react-intl";
 
 function App() {
   const lightMode = useSelector((root: RootState) => root.app.light_mode);
@@ -36,10 +37,16 @@ function App() {
       <ThemeProvider theme={darkTheme}>
         <CssBaseline />
 
-        <ResponsiveAppbar />
-        <Box sx={{ mt: 8 }}>
-          <Outlet />
-        </Box>
+        <IntlProvider
+          // messages={messagesInFrench}
+          locale="fr"
+          defaultLocale="en"
+        >
+          <ResponsiveAppbar />
+          <Box sx={{ mt: 8 }}>
+            <Outlet />
+          </Box>
+        </IntlProvider>
       </ThemeProvider>
     </>
   );

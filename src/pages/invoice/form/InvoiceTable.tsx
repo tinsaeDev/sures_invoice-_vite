@@ -15,6 +15,7 @@ import { Close } from "@mui/icons-material";
 import { FormikProps } from "formik";
 import { currencies } from "../currencies";
 import { useMemo } from "react";
+import { FormattedNumber } from "react-intl";
 
 export default function InvoiceTable(props: {
   formik: FormikProps<Invoice & TemplateLabels>;
@@ -130,13 +131,7 @@ export default function InvoiceTable(props: {
                   <TextField
                     InputProps={{
                       startAdornment: (
-                        <InputAdornment
-                          position="end"
-                          sx={{
-                            p: 1,
-                            background: "red",
-                          }}
-                        >
+                        <InputAdornment position="start">
                           {currency?.symboll || "NC"}
                         </InputAdornment>
                       ),
@@ -148,7 +143,13 @@ export default function InvoiceTable(props: {
                     value={item.rate}
                   />
                 </TableCell>
-                <TableCell align="right">{item.rate * item.qty}</TableCell>
+                <TableCell align="right">
+                  <FormattedNumber
+                    value={item.rate * item.qty}
+                    style="currency"
+                    currency={values.currency_code}
+                  />
+                </TableCell>
 
                 <IconButton
                   sx={{

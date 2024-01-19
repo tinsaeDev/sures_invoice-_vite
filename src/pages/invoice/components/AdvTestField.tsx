@@ -63,7 +63,6 @@ export default function AdvTextField(
         ...props.inputProps,
         style: {
           textAlign: "right",
-          fontWeight: "bold",
           ...props.inputProps?.style,
         },
       }}

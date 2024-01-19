@@ -7,6 +7,7 @@ import {
   Divider,
   Fab,
   FormControl,
+  InputAdornment,
   Paper,
   Stack,
   TextField,
@@ -18,6 +19,7 @@ import AdvTextField from "../components/AdvTestField";
 import InvoiceTable from "./InvoiceTable";
 
 import { currencies } from "../currencies";
+import { FormattedNumber } from "react-intl";
 
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -440,8 +442,12 @@ export default function InvoiceForm() {
                             />
                           </td>
                           <td>
-                            <Typography fontWeight="bold">
-                              {subTotal}
+                            <Typography textAlign="right" fontWeight="bold">
+                              <FormattedNumber
+                                value={subTotal}
+                                style="currency"
+                                currency={values.currency_code}
+                              />
                             </Typography>
                           </td>
                         </tr>
@@ -465,6 +471,18 @@ export default function InvoiceForm() {
                               error={Boolean(
                                 errors.discount && touched.discount
                               )}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                              inputProps={{
+                                style: {
+                                  textAlign: "right",
+                                },
+                              }}
                             />
                           </td>
                         </tr>
@@ -487,6 +505,15 @@ export default function InvoiceForm() {
                               error={Boolean(
                                 errors.shipping && touched.shipping
                               )}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    {currencies.find((c) => {
+                                      return c.code == values.currency_code;
+                                    })?.symboll || "NC"}
+                                  </InputAdornment>
+                                ),
+                              }}
                             />
                           </td>
                         </tr>
@@ -510,6 +537,18 @@ export default function InvoiceForm() {
                               error={Boolean(
                                 errors.tax_rate && touched.tax_rate
                               )}
+                              InputProps={{
+                                endAdornment: (
+                                  <InputAdornment position="end">
+                                    %
+                                  </InputAdornment>
+                                ),
+                              }}
+                              inputProps={{
+                                style: {
+                                  textAlign: "right",
+                                },
+                              }}
                             />
                           </td>
                         </tr>
@@ -527,7 +566,13 @@ export default function InvoiceForm() {
                             />
                           </td>
                           <td>
-                            <Typography>{total}</Typography>
+                            <Typography textAlign="right" variant="caption">
+                              <FormattedNumber
+                                value={total}
+                                style="currency"
+                                currency={values.currency_code}
+                              />
+                            </Typography>
                           </td>
                         </tr>
 
@@ -553,6 +598,15 @@ export default function InvoiceForm() {
                               error={Boolean(
                                 errors.amount_paid && touched.amount_paid
                               )}
+                              InputProps={{
+                                startAdornment: (
+                                  <InputAdornment position="start">
+                                    {currencies.find((c) => {
+                                      return c.code == values.currency_code;
+                                    })?.symboll || "NC"}
+                                  </InputAdornment>
+                                ),
+                              }}
                             />
                           </td>
                         </tr>
@@ -567,7 +621,13 @@ export default function InvoiceForm() {
                             />
                           </td>
                           <td>
-                            <Typography>{balanceDue}</Typography>
+                            <Typography textAlign="right" fontWeight="bold">
+                              <FormattedNumber
+                                value={balanceDue}
+                                style="currency"
+                                currency={values.currency_code}
+                              />
+                            </Typography>
                           </td>
                         </tr>
                       </tbody>
