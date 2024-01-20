@@ -99,13 +99,13 @@ export default function InvoiceDashboadPage() {
     const invoiceValues: InvoiceValue = {
       //
       id: nextIDInvoice,
-      bill_to: "Ae Keber",
-      shipped_to: "Shipped to",
+      bill_to: "",
+      shipped_to: "",
 
-      date_prepared: "Date",
-      payment_terms: "Payment Terms",
+      date_prepared: "",
+      payment_terms: "",
       due_date: "",
-      po: "PO",
+      po: "",
 
       // Table
 
@@ -160,6 +160,7 @@ export default function InvoiceDashboadPage() {
           variant="contained"
           onClick={() => {
             const newInvoice: Invoice = createNewInvoice();
+
             const invoices: Invoice[] = JSON.parse(
               localStorage.getItem("invoices") || "[]"
             );
