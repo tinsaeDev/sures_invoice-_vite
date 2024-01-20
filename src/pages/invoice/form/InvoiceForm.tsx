@@ -7,6 +7,7 @@ import {
   Divider,
   Fab,
   FormControl,
+  IconButton,
   InputAdornment,
   Paper,
   Stack,
@@ -14,12 +15,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Formik } from "formik";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import AdvTextField from "../components/AdvTestField";
 import InvoiceTable from "./InvoiceTable";
 
 import { currencies } from "../currencies";
 import { FormattedNumber } from "react-intl";
+import NumericFormatCustom from "../../../components/NumericFormatCustom";
 
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -98,6 +100,13 @@ export default function InvoiceForm() {
     tax_rate: 10,
     amount_paid: 0,
   };
+
+  // Shipping fee
+  const [hasDiscount, setHasDiscount] = useState(false);
+
+  const [hasShippingFee, setHasShippingFee] = useState(false);
+  const [hasTax, setHasTax] = useState(false);
+
   return (
     <Container maxWidth="xl">
       <Formik
@@ -245,30 +254,32 @@ export default function InvoiceForm() {
                         />
                       </Stack>
 
-                      <Stack>
-                        <AdvTextField
-                          size="small"
-                          templateLable="SHIPPED_TO"
-                          inputProps={{
-                            style: {
-                              textAlign: "left",
-                            },
-                          }}
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                        />
-                        <TextField
-                          name="shipped_to"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.shipped_to}
-                          size="small"
-                          error={Boolean(
-                            errors.shipped_to && touched.shipped_to
-                          )}
-                          label="Shipped to"
-                        />
-                      </Stack>
+                      {true && (
+                        <Stack>
+                          <AdvTextField
+                            size="small"
+                            templateLable="SHIPPED_TO"
+                            inputProps={{
+                              style: {
+                                textAlign: "left",
+                              },
+                            }}
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                          />
+                          <TextField
+                            name="shipped_to"
+                            onChange={handleChange}
+                            onBlur={handleBlur}
+                            value={values.shipped_to}
+                            size="small"
+                            error={Boolean(
+                              errors.shipped_to && touched.shipped_to
+                            )}
+                            label="Shipped to"
+                          />
+                        </Stack>
+                      )}
                     </Stack>
                   </Stack>
                   {/* Left Header */}
@@ -431,6 +442,13 @@ export default function InvoiceForm() {
 
                   <Stack spacing={0.5} alignItems="flex-end">
                     <table>
+                      <thead>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
+                      </thead>
                       <tbody>
                         {/* Sub TOtal */}
                         <tr>
@@ -453,103 +471,198 @@ export default function InvoiceForm() {
                         </tr>
 
                         {/* Discount */}
-                        <tr>
-                          <td>
-                            <AdvTextField
-                              templateLable="DISCOUNT"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                          </td>
-                          <td>
-                            <TextField
-                              name="discount"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.discount}
-                              size="small"
-                              error={Boolean(
-                                errors.discount && touched.discount
-                              )}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    %
-                                  </InputAdornment>
-                                ),
-                              }}
-                              inputProps={{
-                                style: {
-                                  textAlign: "right",
-                                },
-                              }}
-                            />
-                          </td>
-                        </tr>
+
+                        {hasDiscount && (
+                          <tr>
+                            <td>
+                              <AdvTextField
+                                templateLable="DISCOUNT"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                name="discount"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.discount}
+                                size="small"
+                                error={Boolean(
+                                  errors.discount && touched.discount
+                                )}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      %
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                inputProps={{
+                                  style: {
+                                    textAlign: "right",
+                                  },
+                                }}
+                              />
+                            </td>
+                            <td>
+                              <IconButton
+                                onClick={() => {
+                                  setFieldValue("discount", 0);
+                                  setHasDiscount(false);
+                                }}
+                                size="small"
+                              >
+                                <Close />
+                              </IconButton>
+                            </td>
+                          </tr>
+                        )}
+
                         {/* Shipping */}
-                        <tr>
-                          <td>
-                            <AdvTextField
-                              templateLable="SHIPPING"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                          </td>
-                          <td>
-                            <TextField
-                              size="small"
-                              name="shipping"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.shipping}
-                              error={Boolean(
-                                errors.shipping && touched.shipping
-                              )}
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    {currencies.find((c) => {
-                                      return c.code == values.currency_code;
-                                    })?.symboll || "NC"}
-                                  </InputAdornment>
-                                ),
-                              }}
-                            />
-                          </td>
-                        </tr>
+
+                        {hasShippingFee && (
+                          <tr>
+                            <td>
+                              <AdvTextField
+                                templateLable="SHIPPING"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                size="small"
+                                name="shipping"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.shipping}
+                                error={Boolean(
+                                  errors.shipping && touched.shipping
+                                )}
+                                InputProps={{
+                                  inputComponent: NumericFormatCustom as any,
+
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      {currencies.find((c) => {
+                                        return c.code == values.currency_code;
+                                      })?.symboll || "NC"}
+                                    </InputAdornment>
+                                  ),
+                                }}
+                              />
+                            </td>
+
+                            <td>
+                              <IconButton
+                                onClick={() => {
+                                  setFieldValue("shipping", 0);
+                                  setHasShippingFee(false);
+                                }}
+                                size="small"
+                              >
+                                <Close />
+                              </IconButton>
+                            </td>
+                          </tr>
+                        )}
 
                         {/* Tax Rate */}
+                        {hasTax && (
+                          <tr>
+                            <td>
+                              <AdvTextField
+                                templateLable="TAX_RATE"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                              />
+                            </td>
+                            <td>
+                              <TextField
+                                size="small"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.tax_rate}
+                                name="tax_rate"
+                                error={Boolean(
+                                  errors.tax_rate && touched.tax_rate
+                                )}
+                                InputProps={{
+                                  endAdornment: (
+                                    <InputAdornment position="end">
+                                      %
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                inputProps={{
+                                  /// <reference path="" />
+
+                                  style: {
+                                    textAlign: "right",
+                                  },
+                                }}
+                              />
+                            </td>
+
+                            <td>
+                              <IconButton
+                                onClick={() => {
+                                  setFieldValue("tax_rate", 0);
+                                  setHasTax(false);
+                                }}
+                                size="small"
+                              >
+                                <Close />
+                              </IconButton>
+                            </td>
+                          </tr>
+                        )}
+
+                        {/* Optional Field Controlls */}
+
                         <tr>
-                          <td>
-                            <AdvTextField
-                              templateLable="TAX_RATE"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                            />
-                          </td>
-                          <td>
-                            <TextField
-                              size="small"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.tax_rate}
-                              name="tax_rate"
-                              error={Boolean(
-                                errors.tax_rate && touched.tax_rate
-                              )}
-                              InputProps={{
-                                endAdornment: (
-                                  <InputAdornment position="end">
-                                    %
-                                  </InputAdornment>
-                                ),
-                              }}
-                              inputProps={{
-                                style: {
-                                  textAlign: "right",
-                                },
-                              }}
-                            />
+                          <td colSpan={2} align="right">
+                            {/* Discount */}
+                            {!hasDiscount && (
+                              <Button
+                                size="small"
+                                startIcon={<Add />}
+                                onClick={() => {
+                                  setFieldValue("discount", 0);
+                                  setHasDiscount(true);
+                                }}
+                              >
+                                Discount
+                              </Button>
+                            )}
+                            {/* Shipping */}
+                            {!hasShippingFee && (
+                              <Button
+                                size="small"
+                                startIcon={<Add />}
+                                onClick={() => {
+                                  setFieldValue("shipping", 0);
+                                  setHasShippingFee(true);
+                                }}
+                              >
+                                Shipping
+                              </Button>
+                            )}
+
+                            {/* Tax */}
+                            {!hasTax && (
+                              <Button
+                                size="small"
+                                startIcon={<Add />}
+                                onClick={() => {
+                                  setFieldValue("tax_rate", 0);
+                                  setHasTax(true);
+                                }}
+                              >
+                                Tax
+                              </Button>
+                            )}
                           </td>
                         </tr>
 
@@ -599,6 +712,8 @@ export default function InvoiceForm() {
                                 errors.amount_paid && touched.amount_paid
                               )}
                               InputProps={{
+                                inputComponent: NumericFormatCustom as any,
+
                                 startAdornment: (
                                   <InputAdornment position="start">
                                     {currencies.find((c) => {
@@ -628,6 +743,15 @@ export default function InvoiceForm() {
                                 currency={values.currency_code}
                               />
                             </Typography>
+                          </td>
+                          <td
+                            style={{
+                              visibility: "hidden",
+                            }}
+                          >
+                            <IconButton size="small">
+                              <Close />
+                            </IconButton>
                           </td>
                         </tr>
                       </tbody>
