@@ -131,8 +131,7 @@ export default function InvoiceTable(props: {
                 <TableCell>
                   <TextField
                     InputProps={{
-                      inputComponent: NumericFormatCustom as HTMLInputElement,
-
+                      inputComponent: NumericFormatCustom as any,
                       startAdornment: (
                         <InputAdornment position="start">
                           {currency?.symboll || "NC"}
