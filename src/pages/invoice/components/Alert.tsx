@@ -51,7 +51,7 @@ function SnackbarAlert(props: {
   return (
     <>
       {data && (
-        <Snackbar open={open}>
+        <Snackbar onClose={props.onClose} autoHideDuration={2000} open={open}>
           <Alert
             onClose={() => {
               props.onClose();

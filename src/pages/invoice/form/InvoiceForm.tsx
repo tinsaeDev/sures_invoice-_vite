@@ -108,6 +108,14 @@ export default function InvoiceForm() {
           disabled={savingData}
           onClick={() => {
             saveData();
+
+            if (alertContext) {
+              alertContext.showAlert({
+                message: "Invoice has been saved locally!",
+                title: "Invoice Saved",
+                severity: "info",
+              });
+            }
           }}
         >
           <Save color="primary" />
