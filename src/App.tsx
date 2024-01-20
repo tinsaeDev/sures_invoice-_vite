@@ -11,6 +11,7 @@ import { RootState } from "./store";
 import { Box } from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { IntlProvider } from "react-intl";
+import AlertProvider from "./pages/invoice/components/Alert";
 
 function App() {
   const lightMode = useSelector((root: RootState) => root.app.light_mode);
@@ -42,10 +43,12 @@ function App() {
           locale="fr"
           defaultLocale="en"
         >
-          <ResponsiveAppbar />
-          <Box sx={{ mt: 8 }}>
-            <Outlet />
-          </Box>
+          <AlertProvider>
+            <ResponsiveAppbar />
+            <Box sx={{ mt: 8 }}>
+              <Outlet />
+            </Box>
+          </AlertProvider>
         </IntlProvider>
       </ThemeProvider>
     </>

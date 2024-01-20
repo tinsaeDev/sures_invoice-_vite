@@ -22,7 +22,14 @@ import {
   Typography,
 } from "@mui/material";
 import { Form, Formik, FormikProps } from "formik";
-import { createRef, forwardRef, useRef, useState } from "react";
+import {
+  createRef,
+  forwardRef,
+  useCallback,
+  useContext,
+  useRef,
+  useState,
+} from "react";
 import AdvTextField from "../components/AdvTestField";
 import InvoiceTable from "./InvoiceTable";
 
@@ -31,6 +38,7 @@ import { FormattedNumber } from "react-intl";
 import NumericFormatCustom from "../../../components/NumericFormatCustom";
 import { Link, useParams } from "react-router-dom";
 import { TransitionProps } from "@mui/material/transitions";
+import { AlertContext } from "../components/Alert";
 
 export default function InvoiceForm() {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -60,6 +68,34 @@ export default function InvoiceForm() {
   const formikRef = createRef<FormikProps<Invoice>>();
 
   const [showTemplateSaveDialog, setShowTemplateSaveDialog] = useState(false);
+
+  const saveData = useCallback(
+    function () {
+      if (!formikRef.current || !id) {
+        alert("Formk is not found ");
+        return;
+      }
+      setSavingData(true);
+
+      const invoices: Invoice[] = JSON.parse(
+        localStorage.getItem("invoices") || "[]"
+      );
+      invoices.splice(
+        invoices.findIndex((inv) => inv.id == Number.parseInt(id)),
+        1,
+        formikRef.current.values
+      );
+
+      localStorage.setItem("invoices", JSON.stringify(invoices));
+
+      setTimeout(function () {
+        setSavingData(false);
+      }, 1000);
+    },
+    [formikRef, id]
+  );
+
+  const alertContext = useContext(AlertContext);
   return (
     <Container maxWidth="xl">
       <Toolbar color="">
@@ -71,26 +107,7 @@ export default function InvoiceForm() {
         <IconButton
           disabled={savingData}
           onClick={() => {
-            if (!formikRef.current || !id) {
-              alert("Formk is not found ");
-              return;
-            }
-            setSavingData(true);
-
-            const invoices: Invoice[] = JSON.parse(
-              localStorage.getItem("invoices") || "[]"
-            );
-            invoices.splice(
-              invoices.findIndex((inv) => inv.id == Number.parseInt(id)),
-              1,
-              formikRef.current.values
-            );
-
-            localStorage.setItem("invoices", JSON.stringify(invoices));
-
-            setTimeout(function () {
-              setSavingData(false);
-            }, 1000);
+            saveData();
           }}
         >
           <Save color="primary" />
@@ -844,6 +861,7 @@ export default function InvoiceForm() {
                   }}
                   open={showTemplateSaveDialog}
                   onYes={() => {
+                    saveData();
                     const template: Template = {
                       AMOUNT_PAID: values.AMOUNT_PAID,
                       BALANCE_DUE: values.BALANCE_DUE,
@@ -882,7 +900,14 @@ export default function InvoiceForm() {
 
                     localStorage.setItem("template", JSON.stringify(template));
                     setShowTemplateSaveDialog(false);
-                    alert("Saved");
+
+                    if (alertContext) {
+                      alertContext.showAlert({
+                        message: "Template Saved",
+                        title: "Saved",
+                        severity: "success",
+                      });
+                    }
                   }}
                 />
               </Form>
