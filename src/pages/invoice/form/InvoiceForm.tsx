@@ -321,7 +321,7 @@ export default function InvoiceForm() {
                             <AdvTextField
                               fullWidth
                               templateLable="DATE_PREPARED"
-                              values={values.DATE_PREPARED}
+                              value={values.DATE_PREPARED}
                               onChange={handleChange}
                               onBlur={handleBlur}
                             />
