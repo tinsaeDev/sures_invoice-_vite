@@ -16,6 +16,7 @@ import { FormikProps } from "formik";
 import { currencies } from "../currencies";
 import { useMemo } from "react";
 import { FormattedNumber } from "react-intl";
+import NumericFormatCustom from "../../../components/NumericFormatCustom";
 
 export default function InvoiceTable(props: {
   formik: FormikProps<Invoice & TemplateLabels>;
@@ -130,6 +131,8 @@ export default function InvoiceTable(props: {
                 <TableCell>
                   <TextField
                     InputProps={{
+                      inputComponent: NumericFormatCustom as HTMLInputElement,
+
                       startAdornment: (
                         <InputAdornment position="start">
                           {currency?.symboll || "NC"}
