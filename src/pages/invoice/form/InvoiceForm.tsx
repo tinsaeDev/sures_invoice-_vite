@@ -29,7 +29,7 @@ export default function InvoiceForm() {
   const initialValues: Invoice & TemplateLabels = {
     // Label Keys
 
-    INVOICE: "Invoiceee",
+    INVOICE: "Invoice",
     BILL_TO: "Bill to",
     SHIPPED_TO: "Shipped to",
 
@@ -679,7 +679,7 @@ export default function InvoiceForm() {
                             />
                           </td>
                           <td>
-                            <Typography textAlign="right" variant="caption">
+                            <Typography textAlign="right">
                               <FormattedNumber
                                 value={total}
                                 style="currency"

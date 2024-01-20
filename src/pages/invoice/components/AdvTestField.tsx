@@ -2,7 +2,7 @@ import { TextField, TextFieldProps } from "@mui/material";
 import { useCallback, useState } from "react";
 
 enum TemplateInputLabel {
-  INVOICE = "Invoiceee",
+  INVOICE = "Invoice",
 
   //
   BILL_TO = "Bill to",

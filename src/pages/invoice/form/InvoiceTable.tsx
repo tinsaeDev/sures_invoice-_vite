@@ -11,7 +11,7 @@ import {
   Button,
 } from "@mui/material";
 import AdvTextField from "../components/AdvTestField";
-import { Close } from "@mui/icons-material";
+import { Delete } from "@mui/icons-material";
 import { FormikProps } from "formik";
 import { currencies } from "../currencies";
 import { useMemo } from "react";
@@ -44,7 +44,7 @@ export default function InvoiceTable(props: {
     >
       <Table size="small">
         <TableHead>
-          <TableCell colSpan={4}>
+          <TableCell>
             <AdvTextField
               templateLable="TABLE_ITEM"
               inputProps={{
@@ -93,6 +93,7 @@ export default function InvoiceTable(props: {
               onBlur={handleBlur}
             />
           </TableCell>
+          <TableCell></TableCell>
         </TableHead>
         <TableBody>
           {values.items.map((item, index) => {
@@ -107,7 +108,13 @@ export default function InvoiceTable(props: {
                   position: "relative",
                 }}
               >
-                <TableCell colSpan={4}>
+                {/* Name */}
+
+                <TableCell
+                  sx={{
+                    width: "auto",
+                  }}
+                >
                   <TextField
                     fullWidth
                     size="small"
@@ -118,7 +125,12 @@ export default function InvoiceTable(props: {
                     value={item.description}
                   />
                 </TableCell>
-                <TableCell>
+
+                <TableCell
+                  sx={{
+                    width: "15%",
+                  }}
+                >
                   <TextField
                     type="number"
                     size="small"
@@ -126,9 +138,14 @@ export default function InvoiceTable(props: {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={item.qty}
+                    // sx={{maxWidth:"100px"}}
                   />
                 </TableCell>
-                <TableCell>
+                <TableCell
+                  sx={{
+                    width: "15%",
+                  }}
+                >
                   <TextField
                     InputProps={{
                       inputComponent: NumericFormatCustom as any,
@@ -145,29 +162,35 @@ export default function InvoiceTable(props: {
                     value={item.rate}
                   />
                 </TableCell>
-                <TableCell align="right">
+                <TableCell
+                  align="right"
+                  sx={{
+                    width: "10%",
+                  }}
+                >
                   <FormattedNumber
                     value={item.rate * item.qty}
                     style="currency"
                     currency={values.currency_code}
                   />
                 </TableCell>
-
-                <IconButton
-                  sx={{
-                    position: "absolute",
-                    right: "-1rem",
-                    display: "none",
-                  }}
-                  size="small"
-                >
-                  <Close />
-                </IconButton>
+                <TableCell align="right">
+                  <IconButton
+                    size="small"
+                    onClick={() => {
+                      values.items.splice(index, 1);
+                      setFieldValue("items", values.items);
+                    }}
+                    color="warning"
+                  >
+                    <Delete />
+                  </IconButton>
+                </TableCell>
               </TableRow>
             );
           })}
           <TableRow>
-            <TableCell colSpan={4}>
+            <TableCell colSpan={7}>
               <Button
                 size="small"
                 variant="contained"
