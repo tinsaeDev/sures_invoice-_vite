@@ -42,22 +42,27 @@ type TemplateLabels = {
   BALANCE_DUE: string;
 };
 
+type Template = TemplateLabels & {
+  invoice_from: string;
+  note: string;
+  terms: string;
+  currency_code: CurrencyCode;
+
+  tax_rate: number;
+  logo: Blob | UploadedFile | null;
+};
 type UploadedFile = {
   url: string;
 };
 
-type Invoice = {
+type InvoiceValue = {
   /**
    * VALUES
    */
 
   //
-  logo: Blob | UploadedFile | null;
-  id: string;
+  id: number;
 
-  currency_code: CurrencyCode;
-
-  invoice_from: string;
   bill_to: string;
   shipped_to: string;
   date_prepared: string;
@@ -68,18 +73,15 @@ type Invoice = {
   // Table
 
   items: Product[];
-  // Footer
-
-  note: string;
-  terms: string;
 
   // Total
 
   discount: number;
   shipping: number;
-  tax_rate: number;
   amount_paid: number;
 };
+
+type Invoice = Template & InvoiceValue;
 
 type Product = {
   description: string;

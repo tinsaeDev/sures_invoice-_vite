@@ -27,7 +27,7 @@ export default [
       },
 
       {
-        path: "/invoice",
+        path: "/invoice/:id?",
         element: <InvoiceForm />,
       },
     ],
