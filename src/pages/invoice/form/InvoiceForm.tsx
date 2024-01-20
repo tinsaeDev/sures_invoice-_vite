@@ -15,8 +15,8 @@ import {
   Toolbar,
   Typography,
 } from "@mui/material";
-import { Formik, FormikBag, FormikProps } from "formik";
-import { useRef, useState } from "react";
+import { Formik,  FormikProps } from "formik";
+import { createRef, useRef, useState } from "react";
 import AdvTextField from "../components/AdvTestField";
 import InvoiceTable from "./InvoiceTable";
 
@@ -50,7 +50,7 @@ export default function InvoiceForm() {
   }
 
   const [savingData, setSavingData] = useState(false);
-  const formikRef = useRef<FormikProps<Invoice>>();
+  const formikRef = createRef<FormikProps<Invoice>>();
   return (
     <Container maxWidth="xl">
       <Toolbar>
