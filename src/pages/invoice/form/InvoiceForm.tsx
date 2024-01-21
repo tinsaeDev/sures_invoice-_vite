@@ -1,7 +1,15 @@
-import { Add, Close, Home, Save } from "@mui/icons-material";
+import {
+  Add,
+  Anchor,
+  Close,
+  Delete,
+  Home,
+  Language,
+  QrCode,
+  Save,
+} from "@mui/icons-material";
 import {
   Autocomplete,
-  Box,
   Button,
   Container,
   Dialog,
@@ -10,7 +18,6 @@ import {
   DialogContentText,
   DialogTitle,
   Divider,
-  Fab,
   FormControl,
   IconButton,
   InputAdornment,
@@ -27,7 +34,6 @@ import {
   forwardRef,
   useCallback,
   useContext,
-  useRef,
   useState,
 } from "react";
 import AdvTextField from "../components/AdvTestField";
@@ -39,17 +45,19 @@ import NumericFormatCustom from "../../../components/NumericFormatCustom";
 import { Link, useParams } from "react-router-dom";
 import { TransitionProps } from "@mui/material/transitions";
 import { AlertContext } from "../components/Alert";
+import GenerateButton from "./GenerateButton";
+import ImageSelector from "./ImageSelector";
 
 export default function InvoiceForm() {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
   // const initialValues: Invoice =
 
   // Shipping fee
   const [hasDiscount, setHasDiscount] = useState(false);
-
   const [hasShippingFee, setHasShippingFee] = useState(false);
   const [hasTax, setHasTax] = useState(false);
+
+  const [hasLink, setHasLink] = useState(false);
+  const [hasQR, setHasQR] = useState(false);
 
   const { id } = useParams();
   const invoices: Invoice[] = JSON.parse(
@@ -164,77 +172,15 @@ export default function InvoiceForm() {
                       {/* RIght Header*/}
 
                       <Stack spacing={2}>
-                        <Box
-                          sx={{
-                            height: "10rem",
-                            width: "10rem",
-                            border: "solid 1px",
-                            position: "relative",
-                            // background: "orange",
+                        <ImageSelector
+                          value={values.logo}
+                          onChange={(value) => {
+                            setFieldValue("logo", value);
                           }}
-                        >
-                          <input
-                            hidden
-                            ref={fileInputRef}
-                            type="file"
-                            accept="image/*"
-                            name="logo"
-                            onChange={(e) => {
-                              const file = e.target.files?.[0];
-                              setFieldValue("logo", file);
-                            }}
-                          />
-
-                          {values.logo ? (
-                            <Box>
-                              <img
-                                style={{
-                                  height: "100%",
-                                  width: "100%",
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0,
-                                }}
-                                src={
-                                  values.logo instanceof Blob
-                                    ? URL.createObjectURL(values.logo)
-                                    : values.logo.url
-                                }
-                              />
-
-                              <Fab
-                                onClick={() => {
-                                  setFieldValue("logo", null);
-                                }}
-                                size="small"
-                                sx={{
-                                  position: "absolute",
-                                  top: 0,
-                                  left: 0,
-                                }}
-                              >
-                                <Close color="error" />
-                              </Fab>
-                            </Box>
-                          ) : (
-                            <Button
-                              onClick={() => {
-                                if (!fileInputRef.current) return;
-                                fileInputRef.current?.click();
-                              }}
-                              sx={{
-                                height: "100%",
-                                width: "100%",
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                              }}
-                              startIcon={<Add />}
-                            >
-                              Add Photo
-                            </Button>
-                          )}
-                        </Box>
+                          placeholder="Company Logo"
+                          height="100px"
+                          width="auto"
+                        />
 
                         <TextField
                           size="small"
@@ -252,7 +198,6 @@ export default function InvoiceForm() {
                           <Stack>
                             <AdvTextField
                               size="small"
-                              templateLable="BILL_TO"
                               inputProps={{
                                 style: {
                                   textAlign: "left",
@@ -276,7 +221,6 @@ export default function InvoiceForm() {
                             <Stack>
                               <AdvTextField
                                 size="small"
-                                templateLable="SHIPPED_TO"
                                 value={values.SHIPPED_TO}
                                 inputProps={{
                                   style: {
@@ -306,7 +250,6 @@ export default function InvoiceForm() {
                         {/* TItle and Number */}
                         <Stack alignItems="flex-end">
                           <AdvTextField
-                            templateLable="INVOICE"
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.INVOICE}
@@ -345,7 +288,6 @@ export default function InvoiceForm() {
                           <Stack direction="row" alignItems="center">
                             <AdvTextField
                               fullWidth
-                              templateLable="DATE_PREPARED"
                               value={values.DATE_PREPARED}
                               onChange={handleChange}
                               onBlur={handleBlur}
@@ -370,7 +312,6 @@ export default function InvoiceForm() {
                               onChange={handleChange}
                               onBlur={handleBlur}
                               fullWidth
-                              templateLable="PAYMENT_TERMS"
                               value={values.PAYMENT_TERMS}
                             />
 
@@ -392,7 +333,6 @@ export default function InvoiceForm() {
                           <Stack direction="row" alignItems="center">
                             <AdvTextField
                               fullWidth
-                              templateLable="DUE_DATE"
                               value={values.DUE_DATE}
                               onChange={handleChange}
                               onBlur={handleBlur}
@@ -415,10 +355,9 @@ export default function InvoiceForm() {
                           <Stack direction="row" alignItems="center">
                             <AdvTextField
                               fullWidth
-                              templateLable="PO"
-                              value={values.PO}
                               onChange={handleChange}
                               onBlur={handleBlur}
+                              defaultValue={values.PO}
                             />
                             <TextField
                               fullWidth
@@ -449,10 +388,10 @@ export default function InvoiceForm() {
                         {/* Note */}
                         <Stack>
                           <AdvTextField
-                            templateLable="NOTE"
                             inputProps={{ style: { textAlign: "left" } }}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            defaultValue={values.NOTE}
                           />
                           <TextField
                             fullWidth
@@ -468,14 +407,134 @@ export default function InvoiceForm() {
                           />
                         </Stack>
 
+                        {/* Link and QR Cide */}
+                        <Stack flexGrow={1} spacing={1}>
+                          {/* lINK */}
+
+                          {hasLink && (
+                            <Stack spacing={0.5}>
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="center"
+                              >
+                                <AdvTextField
+                                  inputProps={{ style: { textAlign: "left" } }}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  defaultValue={values.LINK}
+                                  name="LINK"
+                                />
+
+                                <IconButton color="warning">
+                                  <Delete
+                                    onClick={() => {
+                                      setHasLink(false);
+                                      setFieldValue("link", "");
+                                    }}
+                                  />
+                                </IconButton>
+                              </Stack>
+
+                              <TextField
+                                fullWidth
+                                name="link"
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.link}
+                                size="small"
+                                error={Boolean(errors.link && touched.link)}
+                                InputProps={{
+                                  startAdornment: (
+                                    <InputAdornment position="start">
+                                      <Language />
+                                    </InputAdornment>
+                                  ),
+                                }}
+                                placeholder="Custom link to this invoice"
+                              />
+                            </Stack>
+                          )}
+
+                          {/* QR */}
+
+                          {hasQR && (
+                            <Stack spacing={0.5}>
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                              >
+                                <AdvTextField
+                                  inputProps={{ style: { textAlign: "left" } }}
+                                  onChange={handleChange}
+                                  onBlur={handleBlur}
+                                  defaultValue={values.QR}
+                                  name="QR"
+                                />
+
+                                <IconButton
+                                  color="warning"
+                                  onClick={() => {
+                                    setHasQR(false);
+                                    setFieldValue("qr", null);
+                                  }}
+                                >
+                                  <Delete />
+                                </IconButton>
+                              </Stack>
+
+                              <ImageSelector
+                                value={values.qr}
+                                onChange={(value) => {
+                                  setFieldValue("qr", value);
+                                }}
+                                placeholder="Add QR Code "
+                                height="100px"
+                                width="auto"
+                              />
+                            </Stack>
+                          )}
+
+                          {/* QR and Link Controlls */}
+                          <Stack
+                            direction="row"
+                            alignItems="center"
+                            justifyContent="flex-end"
+                          >
+                            {!hasLink && (
+                              <Button
+                                startIcon={<Anchor />}
+                                onClick={() => {
+                                  setFieldValue("link", "");
+                                  setHasLink(true);
+                                }}
+                              >
+                                Add Link
+                              </Button>
+                            )}
+
+                            {!hasQR && (
+                              <Button
+                                startIcon={<QrCode />}
+                                onClick={() => {
+                                  setFieldValue("qr", null);
+                                  setHasQR(true);
+                                }}
+                              >
+                                Add QR Code
+                              </Button>
+                            )}
+                          </Stack>
+                        </Stack>
+
                         {/* Terms */}
 
                         <Stack>
                           <AdvTextField
-                            templateLable="TERMS"
                             inputProps={{ style: { textAlign: "left" } }}
                             onChange={handleChange}
                             onBlur={handleBlur}
+                            defaultValue={values.TERMS}
                           />
                           <TextField
                             fullWidth
@@ -499,7 +558,6 @@ export default function InvoiceForm() {
                             <tr>
                               <td>
                                 <AdvTextField
-                                  templateLable="SUB_TOTAL"
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                 />
@@ -521,7 +579,7 @@ export default function InvoiceForm() {
                               <tr>
                                 <td>
                                   <AdvTextField
-                                    templateLable="DISCOUNT"
+                                    defaultValue={values.DISCOUNT}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                   />
@@ -570,7 +628,7 @@ export default function InvoiceForm() {
                               <tr>
                                 <td>
                                   <AdvTextField
-                                    templateLable="SHIPPING"
+                                    defaultValue={values.SHIPPING}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                   />
@@ -621,7 +679,6 @@ export default function InvoiceForm() {
                               <tr>
                                 <td>
                                   <AdvTextField
-                                    templateLable="TAX_RATE"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                   />
@@ -718,7 +775,6 @@ export default function InvoiceForm() {
                             <tr>
                               <td>
                                 <AdvTextField
-                                  templateLable="TOTAL"
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   style={{
@@ -741,12 +797,12 @@ export default function InvoiceForm() {
                             <tr>
                               <td>
                                 <AdvTextField
-                                  templateLable="AMOUNT_PAID"
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                   style={{
                                     fontWeight: "normal",
                                   }}
+                                  defaultValue={values.AMOUNT_PAID}
                                 />
                               </td>
                               <td>
@@ -778,7 +834,7 @@ export default function InvoiceForm() {
                             <tr>
                               <td>
                                 <AdvTextField
-                                  templateLable="BALANCE_DUE"
+                                  defaultValue={values.BALANCE_DUE}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
                                 />
@@ -802,6 +858,42 @@ export default function InvoiceForm() {
                                 </IconButton>
                               </td>
                             </tr>
+
+                            {/* Signature */}
+                            <tr>
+                              <td colSpan={3}>
+                                <Stack
+                                  alignItems={"flex-end"}
+                                  sx={
+                                    {
+                                      // background:"red"
+                                    }
+                                  }
+                                >
+                                  <AdvTextField
+                                    defaultValue={values.SIGNATURE}
+                                    onChange={handleChange}
+                                    onBlur={handleBlur}
+                                    inputProps={{
+                                      style: {
+                                        fontWeight: "bold",
+                                        textAlign: "center",
+                                      },
+                                    }}
+                                  />
+
+                                  <ImageSelector
+                                    onChange={(value) => {
+                                      setFieldValue("signature", value);
+                                    }}
+                                    value={values.signature}
+                                    placeholder="Select Signature"
+                                    height="100px"
+                                    width="auto"
+                                  />
+                                </Stack>
+                              </td>
+                            </tr>
                           </tbody>
                         </table>
                       </Stack>
@@ -810,9 +902,7 @@ export default function InvoiceForm() {
 
                   <Paper>
                     <Stack p={2} spacing={2}>
-                      <Button size="small" variant="contained">
-                        Generate Invoice
-                      </Button>
+                      <GenerateButton formik={formik} />
 
                       <Divider />
 
@@ -881,7 +971,13 @@ export default function InvoiceForm() {
                       INVOICE: values.INVOICE,
 
                       logo: values.logo,
+
+                      SIGNATURE: values.SIGNATURE,
+                      signature: values.signature,
                       NOTE: values.NOTE,
+                      LINK: values.LINK,
+                      QR: values.QR,
+                      TERMS: values.TERMS,
 
                       PAYMENT_TERMS: values.PAYMENT_TERMS,
                       PO: values.PO,
@@ -895,8 +991,6 @@ export default function InvoiceForm() {
                       TABLE_RATE: values.TABLE_RATE,
                       TAX_RATE: values.TAX_RATE,
                       TOTAL: values.TOTAL,
-
-                      TERMS: values.TERMS,
 
                       // Global Values
                       terms: values.terms,

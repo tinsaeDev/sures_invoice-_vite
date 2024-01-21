@@ -26,7 +26,7 @@ export default function InvoiceDashboadPage() {
     return JSON.parse(localStorage.getItem("invoices") || "[]") as Invoice[];
   }, []);
 
-  function createNewInvoice() {
+  function createNewInvoice(): Invoice {
     let templateValues: Template | null = null;
     const savedTemplate = localStorage.getItem("template");
     if (!savedTemplate) {
@@ -39,8 +39,10 @@ export default function InvoiceDashboadPage() {
         terms: "",
         tax_rate: 0,
 
-        //
+        signature: null,
 
+        /**
+         * Template Labels */
         INVOICE: "Invoice",
         BILL_TO: "Bill to",
         SHIPPED_TO: "Shipped to",
@@ -73,6 +75,9 @@ export default function InvoiceDashboadPage() {
         TOTAL: "Total",
         AMOUNT_PAID: "Amount Paid",
         BALANCE_DUE: "Balance Due",
+        LINK: "Link",
+        QR: "QR Code",
+        SIGNATURE: "Signature",
       } as Template;
     } else {
       try {
@@ -106,6 +111,8 @@ export default function InvoiceDashboadPage() {
       payment_terms: "",
       due_date: "",
       po: "",
+      link: "",
+      qr: null,
 
       // Table
 

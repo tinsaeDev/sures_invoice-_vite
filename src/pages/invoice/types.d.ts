@@ -29,6 +29,8 @@ type TemplateLabels = {
   // Footer
 
   NOTE: string;
+  LINK: string;
+  QR: string;
   TERMS: string;
 
   // Total
@@ -40,6 +42,7 @@ type TemplateLabels = {
   TOTAL: string;
   AMOUNT_PAID: string;
   BALANCE_DUE: string;
+  SIGNATURE: string;
 };
 
 type Template = TemplateLabels & {
@@ -50,6 +53,7 @@ type Template = TemplateLabels & {
 
   tax_rate: number;
   logo: Blob | UploadedFile | null;
+  signature: Blob | UploadedFile | null;
 };
 type UploadedFile = {
   url: string;
@@ -79,6 +83,8 @@ type InvoiceValue = {
   discount: number;
   shipping: number;
   amount_paid: number;
+  link: string;
+  qr: Blob | UploadedFile | null;
 };
 
 type Invoice = Template & InvoiceValue;

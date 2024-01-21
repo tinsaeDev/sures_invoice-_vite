@@ -35,8 +35,6 @@ export default function InvoiceTable(props: { formik: FormikProps<Invoice> }) {
     [values.currency_code]
   );
 
-  console.log(values.TABLE_ITEM);
-
   return (
     <TableContainer
       sx={{
@@ -47,7 +45,6 @@ export default function InvoiceTable(props: { formik: FormikProps<Invoice> }) {
         <TableHead>
           <TableCell>
             <AdvTextField
-              templateLable="TABLE_ITEM"
               value={values.TABLE_ITEM}
               inputProps={{
                 style: {
@@ -61,7 +58,6 @@ export default function InvoiceTable(props: { formik: FormikProps<Invoice> }) {
 
           <TableCell>
             <AdvTextField
-              templateLable="TABLE_QTY"
               value={values.TABLE_QTY}
               inputProps={{
                 style: {
@@ -74,7 +70,6 @@ export default function InvoiceTable(props: { formik: FormikProps<Invoice> }) {
           </TableCell>
           <TableCell>
             <AdvTextField
-              templateLable="TABLE_RATE"
               value={values.TABLE_RATE}
               inputProps={{
                 style: {
@@ -87,7 +82,6 @@ export default function InvoiceTable(props: { formik: FormikProps<Invoice> }) {
           </TableCell>
           <TableCell align="right">
             <AdvTextField
-              templateLable="TABLE_AMOUNT"
               value={values.TABLE_AMOUNT}
               inputProps={{
                 style: {
