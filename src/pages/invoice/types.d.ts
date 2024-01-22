@@ -1,4 +1,5 @@
-type CurrencyCode = "USD" | "ETB" | "INR" | "EUR";
+type CurrencyCode = "USD" | "ETB" | "INR" | "EUR" | "GBP" | "JPY";
+
 type Currency = {
   code: CurrencyCode;
   name: string;
@@ -94,3 +95,31 @@ type Product = {
   qty: number;
   rate: number;
 };
+
+type Client = {
+  currency_code: CurrencyCode;
+  language_code: string;
+  email: string;
+  phone: string;
+  address: {
+    street_1: string;
+    street_2: string;
+    city: string;
+    state: string;
+    postal: string;
+    country_code: string;
+  };
+} & (
+  | {
+      type: "PERSON";
+      first_name: string;
+      last_name: string;
+    }
+  | {
+      type: "ORGANIZATION";
+
+      organization_name: string;
+      contact_first_name: string;
+      contact_last_name: string;
+    }
+);

@@ -15,7 +15,7 @@ import {
 import { useTheme } from "@mui/material/styles";
 import React, { ReactElement } from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { Assessment, Dashboard, Settings } from "@mui/icons-material";
+import { Assessment, Dashboard, People, Settings } from "@mui/icons-material";
 import { Link } from "react-router-dom";
 
 export interface MenuItem {
@@ -80,6 +80,12 @@ function MenuDrawler(props: MenuDrawlerProps) {
       icon: <Assessment color="info" />,
       title: "Reports",
       url: "/reports",
+    },
+
+    {
+      icon: <People color="info" />,
+      title: "Clients",
+      url: "/clients",
     },
     {
       icon: <Settings color="info" />,

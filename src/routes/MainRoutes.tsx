@@ -6,6 +6,7 @@ import SerttinsPage from "../pages/invoice/Settings";
 import ReportsPage from "../pages/invoice/Reports";
 
 import { RouteObject } from "react-router-dom";
+import ClientsManagement from "../pages/clients/ClientsManagement";
 
 export default [
   {
@@ -29,6 +30,10 @@ export default [
       {
         path: "/invoice/:id?",
         element: <InvoiceForm />,
+      },
+      {
+        path: "clients",
+        element: <ClientsManagement />,
       },
     ],
   },

@@ -104,6 +104,12 @@ export default function InvoiceForm() {
   );
 
   const alertContext = useContext(AlertContext);
+
+
+
+  const clients:Client[] = [
+
+  ];
   return (
     <Container maxWidth="xl">
       <Toolbar color="">
@@ -207,6 +213,16 @@ export default function InvoiceForm() {
                               onBlur={handleBlur}
                               value={values.BILL_TO}
                             />
+
+                            <Autocomplete
+                              id="free-solo-demo"
+                              freeSolo
+                              options={["A","B"]}
+                              renderInput={(params) => (
+                                <TextField {...params} label="freeSolo" />
+                              )}
+                            />
+
                             <TextField
                               name="bill_to"
                               onChange={handleChange}
