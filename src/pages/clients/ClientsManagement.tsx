@@ -204,15 +204,14 @@ export default function ClientsManagement() {
           const row: Client = data[tableMeta.rowIndex];
           return (
             <Stack>
-              <Stack direction="row" spacing={1}>
-                <Phone color="info" fontSize="small" />
-                <Typography>{row.phone}</Typography>
-              </Stack>
+              <Typography>
+                {row.address.street_1} , {row.address.street_2}{" "}
+              </Typography>
 
-              <Stack direction="row" spacing={1}>
-                <Email color="info" fontSize="small" />
-                <Typography>{row.email}</Typography>
-              </Stack>
+              <Typography>
+                {row.address.city},{row.address.state},
+                {row.address.country_code},{row.address.postal}
+              </Typography>
             </Stack>
           );
         },
