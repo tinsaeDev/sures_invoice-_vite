@@ -1,107 +1,49 @@
 import {
+  Add,
   Business,
   CurrencyExchange,
   Email,
   Language,
   MoreHoriz,
-  Person,
   Phone,
 } from "@mui/icons-material";
-import { Chip, Container, IconButton, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  IconButton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import MUIDataTable, {
   MUIDataTableColumn,
   MUIDataTableOptions,
 } from "mui-datatables";
+import { generateDummyClients } from "../../faker/clients";
+import ClientModal from "./ClientModal";
+import { useState } from "react";
 
 export default function ClientsManagement() {
-  const data: Client[] = [];
-
-  // /////
-
-  function generateDummyData(): Client {
-    const currencies: CurrencyCode[] = ["USD", "EUR"];
-    const languages: string[] = ["en", "fr", "de", "es"];
-    const streetNames: string[] = ["Main", "Park", "Oak", "Cedar"];
-    const cities: string[] = ["New York", "London", "Paris", "Tokyo"];
-    const firstNames: string[] = ["John", "Jane", "Michael", "Emma"];
-    const lastNames: string[] = ["Smith", "Johnson", "Brown", "Davis"];
-    const organizationNames: string[] = [
-      "Acme Inc",
-      "XYZ Corporation",
-      "ABC Co",
-      "123 Company",
-    ];
-
-    const randomCurrency =
-      currencies[Math.floor(Math.random() * currencies.length)];
-    const randomLanguage =
-      languages[Math.floor(Math.random() * languages.length)];
-    const randomStreetName =
-      streetNames[Math.floor(Math.random() * streetNames.length)];
-    const randomCity = cities[Math.floor(Math.random() * cities.length)];
-    const randomFirstName =
-      firstNames[Math.floor(Math.random() * firstNames.length)];
-    const randomLastName =
-      lastNames[Math.floor(Math.random() * lastNames.length)];
-    const randomOrganizationName =
-      organizationNames[Math.floor(Math.random() * organizationNames.length)];
-
-    const clientType = Math.random() < 0.5 ? "PERSON" : "ORGANIZATION";
-
-    if (clientType === "PERSON") {
-      const client: Client = {
-        currency_code: randomCurrency,
-        language_code: randomLanguage,
-        email: `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@example.com`,
-        phone: "+1 555-555-5555",
-        address: {
-          street_1: `${randomStreetName} St`,
-          street_2: "",
-          city: randomCity,
-          state: "NY",
-          postal: "10001",
-          country_code: "US",
-        },
-        type: clientType,
-        first_name: randomFirstName,
-        last_name: randomLastName,
-      };
-      return client;
-    } else {
-      const client: Client = {
-        currency_code: randomCurrency,
-        language_code: randomLanguage,
-        email: `${randomOrganizationName
-          .replace(/\s/g, "")
-          .toLowerCase()}@example.com`,
-        phone: "+1 555-555-5555",
-        address: {
-          street_1: `${randomStreetName} Ave`,
-          street_2: "",
-          city: randomCity,
-          state: "NY",
-          postal: "10001",
-          country_code: "US",
-        },
-        type: clientType,
-        organization_name: randomOrganizationName,
-        contact_first_name: randomFirstName,
-        contact_last_name: randomLastName,
-      };
-      return client;
-    }
-  }
-
-  for (let i = 0; i < 50; i++) {
-    const client = generateDummyData();
-    data.push(client);
-  }
+  const data: Client[] = generateDummyClients(50);
 
   /////
 
   const options: MUIDataTableOptions = {
     filterType: "checkbox",
     selectableRows: "none",
+    customToolbar() {
+      return (
+        <Button
+          size="small"
+          variant="contained"
+          startIcon={<Add />}
+          onClick={() => {
+            setOpenClientModal(true);
+          }}
+        >
+          New Client
+        </Button>
+      );
+    },
   };
 
   const columns: MUIDataTableColumn[] = [
@@ -232,6 +174,8 @@ export default function ClientsManagement() {
     },
   ];
 
+  const [openClientModal, setOpenClientModal] = useState<boolean>(false);
+
   return (
     <Container maxWidth="xl">
       <MUIDataTable
@@ -240,6 +184,14 @@ export default function ClientsManagement() {
         columns={columns}
         options={options}
       />
+
+      {openClientModal && (
+        <ClientModal
+          onClose={() => {
+            setOpenClientModal(false);
+          }}
+        />
+      )}
     </Container>
   );
 }

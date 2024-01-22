@@ -97,6 +97,7 @@ type Product = {
 };
 
 type Client = {
+  id:string;
   currency_code: CurrencyCode;
   language_code: string;
   email: string;

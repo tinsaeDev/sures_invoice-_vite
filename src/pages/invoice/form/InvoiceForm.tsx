@@ -47,6 +47,8 @@ import { TransitionProps } from "@mui/material/transitions";
 import { AlertContext } from "../components/Alert";
 import GenerateButton from "./GenerateButton";
 import ImageSelector from "./ImageSelector";
+import { generateDummyClients } from "../../../faker/clients";
+import ClientModal from "../../clients/ClientModal";
 
 export default function InvoiceForm() {
   // const initialValues: Invoice =
@@ -104,12 +106,10 @@ export default function InvoiceForm() {
   );
 
   const alertContext = useContext(AlertContext);
+  const clients: Client[] = generateDummyClients(50);
 
+  const [openClientModal, setOpenClientModal] = useState<boolean>(false);
 
-
-  const clients:Client[] = [
-
-  ];
   return (
     <Container maxWidth="xl">
       <Toolbar color="">
@@ -202,35 +202,128 @@ export default function InvoiceForm() {
                         />
                         <Stack direction="row" spacing={2}>
                           <Stack>
-                            <AdvTextField
-                              size="small"
-                              inputProps={{
-                                style: {
-                                  textAlign: "left",
-                                },
-                              }}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.BILL_TO}
-                            />
+                            <Stack
+                              direction="row"
+                              justifyContent="space-between"
+                            >
+                              <AdvTextField
+                                size="small"
+                                inputProps={{
+                                  style: {
+                                    textAlign: "left",
+                                  },
+                                }}
+                                onChange={handleChange}
+                                onBlur={handleBlur}
+                                value={values.BILL_TO}
+                              />
 
-                            <Autocomplete
-                              id="free-solo-demo"
-                              freeSolo
-                              options={["A","B"]}
-                              renderInput={(params) => (
-                                <TextField {...params} label="freeSolo" />
+                              {values.bill_to ? (
+                                <Button
+                                  onClick={() => {
+                                    setOpenClientModal(true);
+                                  }}
+                                >
+                                  Edit
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={() => {
+                                    setOpenClientModal(true);
+                                  }}
+                                >
+                                  New
+                                </Button>
                               )}
-                            />
+                            </Stack>
 
-                            <TextField
-                              name="bill_to"
-                              onChange={handleChange}
-                              onBlur={handleBlur}
-                              value={values.bill_to}
-                              size="small"
-                              error={Boolean(errors.bill_to && touched.bill_to)}
-                            />
+                            {values.bill_to ? (
+                              <Stack
+                                direction="row"
+                                justifyContent="space-between"
+                                alignItems="flex-start"
+                                sx={{
+                                  border: "1px solid",
+                                }}
+                                p={1}
+                              >
+                                <Stack flexGrow={1}>
+                                  {(() => {
+                                    const client = clients.find(
+                                      (c) => c.id == values.bill_to
+                                    );
+                                    if (!client) {
+                                      throw new Error();
+                                    }
+                                    return (
+                                      <>
+                                        {client.type == "ORGANIZATION" && (
+                                          <Typography
+                                            variant="subtitle1"
+                                            fontWeight="bold"
+                                          >
+                                            {client.organization_name}
+                                          </Typography>
+                                        )}
+
+                                        {client.type == "PERSON" && (
+                                          <Typography
+                                            variant="subtitle1"
+                                            fontWeight="bold"
+                                          >
+                                            {client.first_name}
+                                            {client.last_name}
+                                          </Typography>
+                                        )}
+
+                                        <Typography>
+                                          {client.address.city},
+                                          {client.address.state},
+                                          {client.address.postal}
+                                        </Typography>
+                                        <Typography>
+                                          {client.address.country_code},
+                                        </Typography>
+                                      </>
+                                    );
+                                  })()}
+                                </Stack>
+                                <IconButton
+                                  onClick={() => {
+                                    setFieldValue("bill_to", null);
+                                  }}
+                                >
+                                  <Close />
+                                </IconButton>
+                              </Stack>
+                            ) : (
+                              <Autocomplete
+                                id="free-solo-demo"
+                                freeSolo
+                                options={clients.map((d) => d.id)}
+                                getOptionLabel={(option: string) => {
+                                  const client = clients.find(
+                                    (c) => c.id == option
+                                  );
+                                  if (!client) {
+                                    return "No result";
+                                  }
+                                  if (client.type == "ORGANIZATION") {
+                                    return client.organization_name;
+                                  } else {
+                                    return `${client.first_name} ${client.last_name}`;
+                                  }
+                                }}
+                                size="small"
+                                onChange={(_e, value) => {
+                                  setFieldValue("bill_to", value);
+                                }}
+                                value={values.bill_to}
+                                renderInput={(params) => (
+                                  <TextField {...params} name={"bill_to"} />
+                                )}
+                              />
+                            )}
                           </Stack>
 
                           {true && (
@@ -1032,6 +1125,14 @@ export default function InvoiceForm() {
             );
           }}
         </Formik>
+      )}
+
+      {openClientModal && (
+        <ClientModal
+          onClose={() => {
+            setOpenClientModal(false);
+          }}
+        />
       )}
     </Container>
   );
