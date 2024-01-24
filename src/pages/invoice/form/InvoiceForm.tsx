@@ -34,6 +34,7 @@ import {
   forwardRef,
   useCallback,
   useContext,
+  useMemo,
   useState,
 } from "react";
 import AdvTextField from "../components/AdvTestField";
@@ -51,7 +52,25 @@ import { generateDummyClients } from "../../../faker/clients";
 import ClientModal from "../../clients/ClientModal";
 
 export default function InvoiceForm() {
-  // const initialValues: Invoice =
+  const settings: Setting = useMemo(function (): Setting {
+    const rawData = localStorage.getItem("settings");
+    if (!rawData) {
+      return {
+        logo: null,
+        email: "",
+        website: "",
+        city: "",
+        company_name: "",
+        country_code: "",
+        postal: "",
+        state: "",
+        street_1: "",
+        street_2: "",
+      };
+    } else {
+      return JSON.parse(rawData) as Setting;
+    }
+  }, []);
 
   // Shipping fee
   const [hasDiscount, setHasDiscount] = useState(false);
@@ -188,18 +207,66 @@ export default function InvoiceForm() {
                           width="auto"
                         />
 
-                        <TextField
-                          size="small"
-                          name="invoice_from"
-                          onChange={handleChange}
-                          onBlur={handleBlur}
-                          value={values.invoice_from}
-                          label="From"
-                          error={Boolean(
-                            errors.invoice_from && touched.invoice_from
-                          )}
-                          placeholder="Invoice From"
-                        />
+                        {/* From */}
+
+                        <Stack>
+                          <Stack direction="row" justifyContent="space-between">
+                            <AdvTextField
+                              size="small"
+                              inputProps={{
+                                style: {
+                                  textAlign: "left",
+                                },
+                              }}
+                              name="FROM"
+                              onChange={handleChange}
+                              onBlur={handleBlur}
+                              value={values.FROM}
+                            />
+
+                            <Link to="/settings">
+                              <Button>Edit Business Profile</Button>
+                            </Link>
+                          </Stack>
+
+                          <Stack
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="flex-start"
+                            p={1}
+                          >
+                            <Stack flexGrow={1}>
+                              {settings.company_name && (
+                                <Typography
+                                  variant="subtitle1"
+                                  fontWeight="bold"
+                                >
+                                  {settings.company_name}
+                                </Typography>
+                              )}
+
+                              {(settings.street_1 || settings.street_2) && (
+                                <Typography>
+                                  {settings.street_1},{settings.street_2}
+                                </Typography>
+                              )}
+
+                              {(settings.city ||
+                                settings.state ||
+                                settings.postal) && (
+                                <Typography>
+                                  {settings.city},{settings.state},
+                                  {settings.postal}
+                                </Typography>
+                              )}
+
+                              {settings.country_code && (
+                                <Typography>{settings.country_code}</Typography>
+                              )}
+                            </Stack>
+                          </Stack>
+                        </Stack>
+
                         <Stack direction="row" spacing={2}>
                           <Stack>
                             <Stack
@@ -213,6 +280,7 @@ export default function InvoiceForm() {
                                     textAlign: "left",
                                   },
                                 }}
+                                name="BILL_TO"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                                 value={values.BILL_TO}
@@ -333,6 +401,7 @@ export default function InvoiceForm() {
                                     textAlign: "left",
                                   },
                                 }}
+                                name="SHIPPED_TO"
                                 onChange={handleChange}
                                 onBlur={handleBlur}
                               />
@@ -359,6 +428,7 @@ export default function InvoiceForm() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             value={values.INVOICE}
+                            name="INVOICE"
                             inputProps={{
                               style: {
                                 fontSize: "40px",
@@ -395,6 +465,7 @@ export default function InvoiceForm() {
                             <AdvTextField
                               fullWidth
                               value={values.DATE_PREPARED}
+                              name="DATE_PREPARED"
                               onChange={handleChange}
                               onBlur={handleBlur}
                             />
@@ -419,6 +490,7 @@ export default function InvoiceForm() {
                               onBlur={handleBlur}
                               fullWidth
                               value={values.PAYMENT_TERMS}
+                              name="PAYMENT_TERMS"
                             />
 
                             <TextField
@@ -442,6 +514,7 @@ export default function InvoiceForm() {
                               value={values.DUE_DATE}
                               onChange={handleChange}
                               onBlur={handleBlur}
+                              name="DUE_DATE"
                             />
                             <TextField
                               fullWidth
@@ -464,6 +537,7 @@ export default function InvoiceForm() {
                               onChange={handleChange}
                               onBlur={handleBlur}
                               defaultValue={values.PO}
+                              name="PO"
                             />
                             <TextField
                               fullWidth
@@ -498,6 +572,7 @@ export default function InvoiceForm() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             defaultValue={values.NOTE}
+                            name="NOTE"
                           />
                           <TextField
                             fullWidth
@@ -641,6 +716,7 @@ export default function InvoiceForm() {
                             onChange={handleChange}
                             onBlur={handleBlur}
                             defaultValue={values.TERMS}
+                            name="TERMS"
                           />
                           <TextField
                             fullWidth
@@ -688,6 +764,7 @@ export default function InvoiceForm() {
                                     defaultValue={values.DISCOUNT}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    name="DISCOUNT"
                                   />
                                 </td>
                                 <td>
@@ -737,6 +814,7 @@ export default function InvoiceForm() {
                                     defaultValue={values.SHIPPING}
                                     onChange={handleChange}
                                     onBlur={handleBlur}
+                                    name="SHIPPING"
                                   />
                                 </td>
                                 <td>
@@ -909,6 +987,7 @@ export default function InvoiceForm() {
                                     fontWeight: "normal",
                                   }}
                                   defaultValue={values.AMOUNT_PAID}
+                                  name="AMOUNT_PAID"
                                 />
                               </td>
                               <td>
@@ -943,6 +1022,7 @@ export default function InvoiceForm() {
                                   defaultValue={values.BALANCE_DUE}
                                   onChange={handleChange}
                                   onBlur={handleBlur}
+                                  name="BALANCE_DUE"
                                 />
                               </td>
                               <td>
@@ -978,6 +1058,7 @@ export default function InvoiceForm() {
                                 >
                                   <AdvTextField
                                     defaultValue={values.SIGNATURE}
+                                    name="SIGNATURE"
                                     onChange={handleChange}
                                     onBlur={handleBlur}
                                     inputProps={{
@@ -1070,6 +1151,7 @@ export default function InvoiceForm() {
                       AMOUNT_PAID: values.AMOUNT_PAID,
                       BALANCE_DUE: values.BALANCE_DUE,
                       BILL_TO: values.BILL_TO,
+                      FROM: values.FROM,
 
                       DATE_PREPARED: values.DATE_PREPARED,
                       DISCOUNT: values.DISCOUNT,
@@ -1103,7 +1185,6 @@ export default function InvoiceForm() {
                       currency_code: values.currency_code,
                       tax_rate: values.tax_rate,
                       note: values.note,
-                      invoice_from: values.invoice_from,
                     };
 
                     localStorage.setItem("template", JSON.stringify(template));

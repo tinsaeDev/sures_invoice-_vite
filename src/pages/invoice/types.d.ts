@@ -10,6 +10,7 @@ type TemplateLabels = {
   INVOICE: string;
 
   //
+  FROM: string;
   BILL_TO: string;
   SHIPPED_TO: string;
 
@@ -47,7 +48,6 @@ type TemplateLabels = {
 };
 
 type Template = TemplateLabels & {
-  invoice_from: string;
   note: string;
   terms: string;
   currency_code: CurrencyCode;
@@ -123,5 +123,3 @@ type Client = {
   postal: string;
   country_code: CountryCode;
 };
-
-

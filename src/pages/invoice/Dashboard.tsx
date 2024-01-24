@@ -29,9 +29,9 @@ export default function InvoiceDashboadPage() {
   function createNewInvoice(): Invoice {
     let templateValues: Template | null = null;
     const savedTemplate = localStorage.getItem("template");
+
     if (!savedTemplate) {
       templateValues = {
-        invoice_from: "",
         logo: null,
         currency_code: "USD",
 
@@ -45,6 +45,7 @@ export default function InvoiceDashboadPage() {
          * Template Labels */
         INVOICE: "Invoice",
         BILL_TO: "Bill to",
+        FROM: "From",
         SHIPPED_TO: "Shipped to",
 
         //
