@@ -1,9 +1,9 @@
 import {
+  AttachMoney,
   BusinessCenter,
-  
   Close,
-  CurrencyLira,
   Email,
+  Flag,
   Language,
   LocationCity,
   Person,
@@ -11,6 +11,7 @@ import {
   Place,
 } from "@mui/icons-material";
 import {
+  Autocomplete,
   Button,
   Divider,
   FormControl,
@@ -29,31 +30,49 @@ import {
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Form, Formik } from "formik";
 
+import isoCountries from "i18n-iso-countries";
+import engLocale from "i18n-iso-countries/langs/en.json";
+
+import currency from "iso-country-currency";
+
 export default function ClientModal(props: { onClose: () => void }) {
+  isoCountries.registerLocale(engLocale);
+
+  const countries = Object.keys(isoCountries.getAlpha2Codes()).map((code) => ({
+    code: code,
+    name: isoCountries.getName(code, "en"),
+  }));
+
+  const currenciesAll = currency.getAllISOCodes();
+  const currencies: currency.Currency[] = [];
+  currenciesAll.forEach((ac) => {
+    const has = currencies.some((c) => c.currency == ac.currency);
+    if (!has) {
+      currencies.push(ac);
+    }
+  });
+
   const initialValues = {
-    id: null,
-    type: "",
+    type: "PERSON",
     first_name: "",
     last_name: "",
-    organization_name: "",
-    contact_first_name: "",
-    contact_last_name: "",
+    // organization_name: "",
+    // contact_first_name: "",
+    // contact_last_name: "",
 
-    currency_code: "",
+    currency_code: "INR",
     language_code: "",
 
     email: "",
     phone: "",
 
-    address: {
-      street_1: "",
-      street_2: "",
-      city: "",
-      state: "",
-      postal: "",
-      country_code: "",
-    },
-  };
+    street_1: "",
+    street_2: "",
+    city: "",
+    state: "",
+    postal: "",
+    country_code: "ET",
+  } as Client;
 
   return (
     <Modal open={true} onClose={props.onClose}>
@@ -102,13 +121,20 @@ export default function ClientModal(props: { onClose: () => void }) {
             {/* Filter */}
             <Formik
               initialValues={initialValues}
-              onSubmit={() => {
+              onSubmit={(values) => {
+                console.log(values);
                 alert("Submitting,,,");
               }}
             >
               {function (formik) {
-                const { values, errors, touched, handleChange, handleBlur } =
-                  formik;
+                const {
+                  values,
+                  errors,
+                  touched,
+                  handleChange,
+                  handleBlur,
+                  setFieldValue,
+                } = formik;
                 return (
                   <Form>
                     <Stack spacing={4} justifyContent="space-between">
@@ -311,21 +337,46 @@ export default function ClientModal(props: { onClose: () => void }) {
                         {/* Currency  Code*/}
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
-                            <TextField
-                              name="currency_code"
-                              value={values.currency_code}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
+                            <Autocomplete
                               size="small"
-                              label="Currency"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <CurrencyLira />
-                                  </InputAdornment>
-                                ),
+                              options={currencies.map((c) => c.currency)}
+                              onChange={(_e, value) => {
+                                setFieldValue("currency_code", value);
                               }}
+                              getOptionLabel={(option) => {
+                                const res = currencies.find(
+                                  (c) => c.currency == option
+                                );
+                                if (!res) {
+                                  return "###";
+                                }
+
+                                return `${res.currency} - ${res.symbol}` as string;
+                              }}
+                              value={values.currency_code}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Country"
+                                  InputProps={{
+                                    ...params.InputProps,
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <AttachMoney />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  name={"currency_code"}
+                                />
+                              )}
                             />
+
+                            {touched.country_code && errors.country_code && (
+                              <FormHelperText error>
+                                {errors.country_code}
+                              </FormHelperText>
+                            )}
+
                             {touched.currency_code && errors.currency_code && (
                               <FormHelperText error>
                                 {errors.currency_code}
@@ -390,8 +441,8 @@ export default function ClientModal(props: { onClose: () => void }) {
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
                             <TextField
-                              name="address.street_1"
-                              value={values.address.street_1}
+                              name="street_1"
+                              value={values.street_1}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               size="small"
@@ -404,12 +455,11 @@ export default function ClientModal(props: { onClose: () => void }) {
                                 ),
                               }}
                             />
-                            {touched.address?.street_1 &&
-                              errors.address?.street_1 && (
-                                <FormHelperText error>
-                                  {errors.address?.street_1}
-                                </FormHelperText>
-                              )}
+                            {touched.street_1 && errors.street_1 && (
+                              <FormHelperText error>
+                                {errors.street_1}
+                              </FormHelperText>
+                            )}
                           </FormControl>
                         </Grid>
 
@@ -417,8 +467,8 @@ export default function ClientModal(props: { onClose: () => void }) {
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
                             <TextField
-                              name="address.street_2"
-                              value={values.address.street_2}
+                              name="street_2"
+                              value={values.street_2}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               size="small"
@@ -431,12 +481,11 @@ export default function ClientModal(props: { onClose: () => void }) {
                                 ),
                               }}
                             />
-                            {touched.address?.street_2 &&
-                              errors.address?.street_2 && (
-                                <FormHelperText error>
-                                  {errors.address?.street_2}
-                                </FormHelperText>
-                              )}
+                            {touched.street_2 && errors.street_2 && (
+                              <FormHelperText error>
+                                {errors.street_2}
+                              </FormHelperText>
+                            )}
                           </FormControl>
                         </Grid>
 
@@ -444,8 +493,8 @@ export default function ClientModal(props: { onClose: () => void }) {
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
                             <TextField
-                              name="address.city"
-                              value={values.address.city}
+                              name="city"
+                              value={values.city}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               size="small"
@@ -458,9 +507,9 @@ export default function ClientModal(props: { onClose: () => void }) {
                                 ),
                               }}
                             />
-                            {touched.address?.city && errors.address?.city && (
+                            {touched.city && errors.city && (
                               <FormHelperText error>
-                                {errors.address?.city}
+                                {errors.city}
                               </FormHelperText>
                             )}
                           </FormControl>
@@ -470,8 +519,8 @@ export default function ClientModal(props: { onClose: () => void }) {
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
                             <TextField
-                              name="address.state"
-                              value={values.address.state}
+                              name="state"
+                              value={values.state}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               size="small"
@@ -484,38 +533,56 @@ export default function ClientModal(props: { onClose: () => void }) {
                                 ),
                               }}
                             />
-                            {touched.address?.state && errors.address?.city && (
+                            {touched.state && errors.city && (
                               <FormHelperText error>
-                                {errors.address?.state}
+                                {errors.state}
                               </FormHelperText>
                             )}
                           </FormControl>
                         </Grid>
 
-                        {/* State/Province */}
+                        {/* Country */}
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
-                            <TextField
-                              name="address.country_code"
-                              value={values.address.country_code}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
+                            <Autocomplete
                               size="small"
-                              label="Country"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <LocationCity />
-                                  </InputAdornment>
-                                ),
+                              options={countries.map((c) => c.code)}
+                              onChange={(_e, value) => {
+                                setFieldValue("country_code", value);
                               }}
-                            />
-                            {touched.address?.country_code &&
-                              errors.address?.country_code && (
-                                <FormHelperText error>
-                                  {errors.address?.country_code}
-                                </FormHelperText>
+                              getOptionLabel={(option) => {
+                                const res = countries.find(
+                                  (c) => c.code == option
+                                );
+                                if (!res) {
+                                  return "###";
+                                }
+
+                                return res.name as string;
+                              }}
+                              value={values.country_code}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  label="Country"
+                                  InputProps={{
+                                    ...params.InputProps,
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Flag />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                  name={"country_code"}
+                                />
                               )}
+                            />
+
+                            {touched.country_code && errors.country_code && (
+                              <FormHelperText error>
+                                {errors.country_code}
+                              </FormHelperText>
+                            )}
                           </FormControl>
                         </Grid>
 
@@ -523,8 +590,8 @@ export default function ClientModal(props: { onClose: () => void }) {
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
                             <TextField
-                              name="address.postal"
-                              value={values.address.postal}
+                              name="postal"
+                              value={values.postal}
                               onChange={handleChange}
                               onBlur={handleBlur}
                               size="small"
@@ -537,12 +604,11 @@ export default function ClientModal(props: { onClose: () => void }) {
                                 ),
                               }}
                             />
-                            {touched.address?.postal &&
-                              errors.address?.postal && (
-                                <FormHelperText error>
-                                  {errors.address?.postal}
-                                </FormHelperText>
-                              )}
+                            {touched.postal && errors.postal && (
+                              <FormHelperText error>
+                                {errors.postal}
+                              </FormHelperText>
+                            )}
                           </FormControl>
                         </Grid>
                       </Grid>

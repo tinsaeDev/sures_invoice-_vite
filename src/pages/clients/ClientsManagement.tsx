@@ -147,12 +147,12 @@ export default function ClientsManagement() {
           return (
             <Stack>
               <Typography>
-                {row.address.street_1} , {row.address.street_2}{" "}
+                {row.street_1} , {row.street_2}{" "}
               </Typography>
 
               <Typography>
-                {row.address.city},{row.address.state},
-                {row.address.country_code},{row.address.postal}
+                {row.city},{row.state},
+                {row.country_code},{row.postal}
               </Typography>
             </Stack>
           );

@@ -277,12 +277,11 @@ export default function InvoiceForm() {
                                         )}
 
                                         <Typography>
-                                          {client.address.city},
-                                          {client.address.state},
-                                          {client.address.postal}
+                                          {client.city},{client.state},
+                                          {client.postal}
                                         </Typography>
                                         <Typography>
-                                          {client.address.country_code},
+                                          {client.country_code},
                                         </Typography>
                                       </>
                                     );
@@ -298,8 +297,6 @@ export default function InvoiceForm() {
                               </Stack>
                             ) : (
                               <Autocomplete
-                                id="free-solo-demo"
-                                freeSolo
                                 options={clients.map((d) => d.id)}
                                 getOptionLabel={(option: string) => {
                                   const client = clients.find(

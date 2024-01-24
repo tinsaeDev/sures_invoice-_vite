@@ -35,17 +35,18 @@ function dummyClient(id: string): Client {
       language_code: randomLanguage,
       email: `${randomFirstName.toLowerCase()}.${randomLastName.toLowerCase()}@example.com`,
       phone: "+1 555-555-5555",
-      address: {
-        street_1: `${randomStreetName} St`,
-        street_2: "",
-        city: randomCity,
-        state: "NY",
-        postal: "10001",
-        country_code: "US",
-      },
+      street_1: `${randomStreetName} St`,
+      street_2: "",
+      city: randomCity,
+      state: "NY",
+      postal: "10001",
+      country_code: "US",
       type: clientType,
       first_name: randomFirstName,
       last_name: randomLastName,
+      contact_first_name: "",
+      contact_last_name: "",
+      organization_name: "",
     };
     return client;
   } else {
@@ -57,18 +58,18 @@ function dummyClient(id: string): Client {
         .replace(/\s/g, "")
         .toLowerCase()}@example.com`,
       phone: "+1 555-555-5555",
-      address: {
-        street_1: `${randomStreetName} Ave`,
-        street_2: "",
-        city: randomCity,
-        state: "NY",
-        postal: "10001",
-        country_code: "US",
-      },
+      street_1: `${randomStreetName} Ave`,
+      street_2: "",
+      city: randomCity,
+      state: "NY",
+      postal: "10001",
+      country_code: "US",
       type: clientType,
       organization_name: randomOrganizationName,
       contact_first_name: randomFirstName,
       contact_last_name: randomLastName,
+      first_name: "",
+      last_name: "",
     };
     return client;
   }

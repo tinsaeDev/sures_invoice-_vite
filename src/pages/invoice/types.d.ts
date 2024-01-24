@@ -96,31 +96,30 @@ type Product = {
   rate: number;
 };
 
+type Country = {
+  code: string;
+  name: string;
+  flag: string;
+};
+
 type Client = {
-  id:string;
-  currency_code: CurrencyCode;
+  id: string;
+  type: "PERSON" | "ORGANIZATION";
+  organization_name: string;
+  contact_first_name: string;
+  contact_last_name: string;
+
+  first_name: string;
+  last_name: string;
+
+  currency_code: string;
   language_code: string;
   email: string;
   phone: string;
-  address: {
-    street_1: string;
-    street_2: string;
-    city: string;
-    state: string;
-    postal: string;
-    country_code: string;
-  };
-} & (
-  | {
-      type: "PERSON";
-      first_name: string;
-      last_name: string;
-    }
-  | {
-      type: "ORGANIZATION";
-
-      organization_name: string;
-      contact_first_name: string;
-      contact_last_name: string;
-    }
-);
+  street_1: string;
+  street_2: string;
+  city: string;
+  state: string;
+  postal: string;
+  country_code: CountryCode;
+};
