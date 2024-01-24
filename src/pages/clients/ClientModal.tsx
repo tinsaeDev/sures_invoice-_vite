@@ -34,6 +34,7 @@ import isoCountries from "i18n-iso-countries";
 import engLocale from "i18n-iso-countries/langs/en.json";
 
 import currency from "iso-country-currency";
+import ISO6391 from "iso-639-1";
 
 export default function ClientModal(props: { onClose: () => void }) {
   isoCountries.registerLocale(engLocale);
@@ -51,6 +52,17 @@ export default function ClientModal(props: { onClose: () => void }) {
       currencies.push(ac);
     }
   });
+
+  const languages = ISO6391.getLanguages([
+    "en",
+    "fr",
+    "am",
+    "hi",
+    "gu",
+    "om",
+    "es",
+    "zh",
+  ]);
 
   const initialValues = {
     type: "PERSON",
@@ -311,21 +323,39 @@ export default function ClientModal(props: { onClose: () => void }) {
                         {/* Language Code  */}
                         <Grid xs={12} sm={6}>
                           <FormControl fullWidth>
-                            <TextField
-                              name="language_code"
-                              value={values.language_code}
-                              onChange={handleChange}
-                              onBlur={handleBlur}
+                            <Autocomplete
                               size="small"
-                              label="Language"
-                              InputProps={{
-                                startAdornment: (
-                                  <InputAdornment position="start">
-                                    <Language />
-                                  </InputAdornment>
-                                ),
+                              options={languages.map((l) => l.code)}
+                              onChange={(_e, value) => {
+                                setFieldValue("language_code", value);
                               }}
+                              getOptionLabel={(option) => {
+                                const res = languages.find(
+                                  (l) => l.code == option
+                                );
+                                if (!res) {
+                                  return "###";
+                                }
+
+                                return `${res.name} - ${res.code}` as string;
+                              }}
+                              value={values.language_code}
+                              renderInput={(params) => (
+                                <TextField
+                                  {...params}
+                                  name="language_code"
+                                  InputProps={{
+                                    ...params.InputProps,
+                                    startAdornment: (
+                                      <InputAdornment position="start">
+                                        <Language />
+                                      </InputAdornment>
+                                    ),
+                                  }}
+                                />
+                              )}
                             />
+
                             {touched.language_code && errors.language_code && (
                               <FormHelperText error>
                                 {errors.language_code}

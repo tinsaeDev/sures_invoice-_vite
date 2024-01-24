@@ -151,8 +151,7 @@ export default function ClientsManagement() {
               </Typography>
 
               <Typography>
-                {row.city},{row.state},
-                {row.country_code},{row.postal}
+                {row.city},{row.state},{row.country_code},{row.postal}
               </Typography>
             </Stack>
           );
